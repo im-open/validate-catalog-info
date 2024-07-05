@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "Resource.v1alpha1.schema.json",
+  "$comment": "Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.",
+  "description": "Resources are those things that aren't components themselves, but are either needed by components or augment components to help them function. Some examples include the ExtendHealth Database, the App Gateway, Resource Groups, and fileshares.\r\rIf a Resource has multiple instances, such as is the case for the internal App Gateway, they should be recorded in the metadata.instances property.\r\rMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/resource/ .",
+  "examples": [
+    {
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "Resource",
+      "metadata": {
+        "name": "artists-db",
+        "description": "Stores artist details"
+      },
+      "spec": {
+        "type": "database",
+        "owner": "artist-relations-team",
+        "system": "artist-engagement-portal"
+      }
+    }
+  ],
+  "allOf": [
+    {
+      "$ref": "Entity.schema.json"
+    },
+    {
+      "type": "object",
+      "required": ["spec"],
+      "properties": {
+        "apiVersion": {
+          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
+        },
+        "kind": {
+          "enum": ["Resource"]
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "deployment-environments": {
+              "type": "array",
+              "description": "A list of environments that this Resource deploys to. More info @ https://techhub.mktp.io/docs/default/system/techhub/im-github-deployments/#techhub-catalog-github-deployments .",
+              "uniqueItems": true,
+              "minItems": 1,
+              "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "examples": [
+                      "Dev",
+                      "QA",
+                      "Stage",
+                      "Prod",
+                      "UAT"
+                  ]
+              }
+            }
+          }
+        },
+        "spec": {
+          "type": "object",
+          "required": ["type", "system"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of resource.\nMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/resource/#more-examples .",
+              "examples": ["database", "event-hub", "app-gateway", "front-door", "fileshare", "resource-group", "external"],
+              "enum": ["database", "event-hub", "app-gateway", "front-door", "fileshare", "resource-group", "external"],
+              "minLength": 1
+            },
+            "owner": {
+              "type": "string",
+              "description": "An entity reference to the owner of the Resource.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
+              "examples": ["artist-relations-team", "user:john.johnson"],
+              "minLength": 1
+            },
+            "dependsOn": {
+              "type": "array",
+              "description": "An array of references to other entities that the resource depends on to function.",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "system": {
+              "type": "string",
+              "description": "An entity reference to the system that the resource belongs to.",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  ]
+}
