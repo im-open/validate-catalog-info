@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "API.v1alpha1.schema.json",
+  "$comment": "Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.",
+  "description": "An API describes an interface that can be exposed by a component. The API can be defined in different formats, like OpenAPI, AsyncAPI, GraphQL, gRPC, or other formats.\nMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/api/ .",
+  "examples": [
+    {
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "API",
+      "metadata": {
+        "name": "artist-api",
+        "description": "Retrieve artist details",
+        "annotations": {
+          "docs": "https://github.com/..../tree/develop/doc"
+        }
+      },
+      "spec": {
+        "type": "openapi",
+        "lifecycle": "production",
+        "owner": "artist-relations-team",
+        "system": "artist-engagement-portal",
+        "definition": "openapi: \"3.0.0\"\ninfo:..."
+      }
+    }
+  ],
+  "allOf": [
+    {
+      "$ref": "Entity.schema.json"
+    },
+    {
+      "type": "object",
+      "required": ["spec"],
+      "properties": {
+        "apiVersion": {
+          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
+        },
+        "kind": {
+          "enum": ["API"]
+        },
+        "spec": {
+          "type": "object",
+          "required": ["type", "lifecycle", "definition", "system"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of the API definition. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/api/#property-value-restrictions .",
+              "examples": ["openapi", "asyncapi"],
+              "enum": ["openapi", "asyncapi"],
+              "minLength": 1
+            },
+            "lifecycle": {
+              "type": "string",
+              "description": "The lifecycle state of the API. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/api/#property-value-restrictions .",
+              "examples": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"],
+              "enum": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"],
+              "minLength": 1
+            },
+            "owner": {
+              "type": "string",
+              "description": "An entity reference to the owner of the API.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
+              "examples": ["artist-relations-team", "user:john.johnson"],
+              "minLength": 1
+            },
+            "system": {
+              "type": "string",
+              "description": "An entity reference to the system that the API belongs to.",
+              "minLength": 1
+            },
+            "definition": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "description": "The definition of the API, based on the format defined by the type.",
+                  "minLength": 1
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "$text": {
+                      "type": "string",
+                      "title": "Substitutions In The Descriptor Format",
+                      "description": "Interprets the contents of the referenced file as plain text and embeds it as a string. \r\rMore info @ https://backstage.io/docs/features/software-catalog/descriptor-format/#substitutions-in-the-descriptor-format.",
+                      "examples": [
+                        "$text: https://petstore.swagger.io/v2/swagger.json",
+                        "$text: ./dotnet-project/wwwroot/openapi.yml"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "$json": {
+                      "type": "string",
+                      "title": "Substitutions In The Descriptor Format",
+                      "description": "Interprets the contents of the referenced file as JSON and embeds the parsed structure. \r\rMore info @ https://backstage.io/docs/features/software-catalog/descriptor-format/#substitutions-in-the-descriptor-format."
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "$yaml": {
+                      "type": "string",
+                      "title": "Substitutions In The Descriptor Format",
+                      "description": "Interprets the contents of the referenced file as YAML and embeds the parsed structure. \r\rMore info @ https://backstage.io/docs/features/software-catalog/descriptor-format/#substitutions-in-the-descriptor-format."
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
