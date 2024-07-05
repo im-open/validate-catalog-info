@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "System.v1alpha1.schema.json",
+  "$comment": "Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.",
+  "description": "Like Domain entities, System entities are a little different than other entity types. Most of them represent bounded contexts, and will therefore \"contain\" Component, API, and Resource entities via those entities spec.system property. There are a few Systems that will be outside of our bounded context model however. These Systems will include things like TechHub, pipeline tooling, and anything else of a nonfunctional nature (authentication, observability, infrastructure systems, etc.).\r\rOnce a Component, Resource, or API is created to implement a Domain, a System entity should be created and linked to that Domain with the spec.domain property (see below).\r\rMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/system/ .",
+  "examples": [
+    {
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "System",
+      "metadata": {
+        "name": "artist-engagement-portal",
+        "description": "Handy tools to keep artists in the loop"
+      },
+      "spec": {
+        "owner": "artist-relations-team",
+        "domain": "artists"
+      }
+    }
+  ],
+  "allOf": [
+    {
+      "$ref": "Entity.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
+        },
+        "kind": {
+          "enum": ["System"]
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "An entity reference to the owner of the System.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
+              "examples": ["artist-relations-team", "user:john.johnson"],
+              "minLength": 1
+            },
+            "domain": {
+              "type": "string",
+              "description": "An entity reference to the domain that the system belongs to.",
+              "examples": ["artists"],
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  ]
+}
