@@ -8,11 +8,11 @@
       "apiVersion": "backstage.io/v1alpha1",
       "kind": "Domain",
       "metadata": {
-        "name": "artists",
-        "description": "Everything about artists"
+        "name": "front-end-tooling",
+        "description": "Tools and components to unify and streamline front-end development, browser performance, and consistency."
       },
       "spec": {
-        "owner": "artist-relations-team"
+        "owner": "group:default/customization"
       }
     }
   ],
@@ -44,8 +44,15 @@
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the Domain.\r\rThis is required because - unlike APIs, Components, Systems and Resources - we load all Domains centrally from the im-practices/techhub repository as representations of our desired future-state bounded context map. So, the owner of a Domain cannot be determined via a host repository's CODEOWNERS file.",
-              "examples": ["artist-relations-team", "user:john.johnson"],
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+              "examples": [
+                "group:default/customization",
+                "group:customization",
+                "user:RyanHauert",
+                "user:default/RyanHauert"
+              ]
             }
           }
         }

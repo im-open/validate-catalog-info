@@ -8,17 +8,14 @@
       "apiVersion": "backstage.io/v1alpha1",
       "kind": "API",
       "metadata": {
-        "name": "artist-api",
-        "description": "Retrieve artist details",
-        "annotations": {
-          "docs": "https://github.com/..../tree/develop/doc"
-        }
+        "name": "appointment-manager-service",
+        "description": "Sets up appointments"
       },
       "spec": {
         "type": "openapi",
-        "lifecycle": "production",
-        "owner": "artist-relations-team",
-        "system": "artist-engagement-portal",
+        "lifecycle": "maintaining",
+        "owner": "group:default/ce2",
+        "system": "system:default/appointment-manager",
         "definition": "openapi: \"3.0.0\"\ninfo:..."
       }
     }
@@ -58,13 +55,26 @@
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the API.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "examples": ["artist-relations-team", "user:john.johnson"],
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+              "examples": [
+                "group:default/ce2",
+                "group:ce2",
+                "user:RyanHauert",
+                "user:default/RyanHauert"
+              ]
             },
             "system": {
               "type": "string",
               "description": "An entity reference to the system that the API belongs to.",
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "\\b(?:system)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: 'system:[<optional-namespace>/]<system-name>'",
+              "examples": [
+                "system:default/appointment-manager",
+                "system:appointment-manager"
+              ]
             },
             "definition": {
               "anyOf": [

@@ -8,12 +8,8 @@
       "apiVersion": "backstage.io/v1alpha1",
       "kind": "System",
       "metadata": {
-        "name": "artist-engagement-portal",
-        "description": "Handy tools to keep artists in the loop"
-      },
-      "spec": {
-        "owner": "artist-relations-team",
-        "domain": "artists"
+        "name": "appointment-manager",
+        "title": "Appointment Manager"
       }
     }
   ],
@@ -36,13 +32,24 @@
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the System.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "examples": ["artist-relations-team", "user:john.johnson"],
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+              "examples": [
+                "group:default/customization",
+                "group:customization",
+                "user:RyanHauert",
+                "user:default/RyanHauert"
+              ]
             },
             "domain": {
               "type": "string",
               "description": "An entity reference to the domain that the system belongs to.",
-              "examples": ["artists"],
+              "examples": [
+                "domain:default/front-end-tooling",
+                "domain:default/content-management",
+                "domain:default/telephony"
+              ],
               "minLength": 1
             }
           }

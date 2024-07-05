@@ -8,13 +8,13 @@
       "apiVersion": "backstage.io/v1alpha1",
       "kind": "Resource",
       "metadata": {
-        "name": "artists-db",
-        "description": "Stores artist details"
+        "name": "launchdarkly",
+        "description": "Tool for toggling"
       },
       "spec": {
-        "type": "database",
-        "owner": "artist-relations-team",
-        "system": "artist-engagement-portal"
+        "type": "external",
+        "owner": "group:default/customization",
+        "system": "system:default/external-resources"
       }
     }
   ],
@@ -68,21 +68,40 @@
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the Resource.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "examples": ["artist-relations-team", "user:john.johnson"],
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+              "examples": [
+                "group:default/customization",
+                "group:customization",
+                "user:RyanHauert",
+                "user:default/RyanHauert"
+              ]
             },
             "dependsOn": {
               "type": "array",
-              "description": "An array of references to other entities that the resource depends on to function.",
+              "description": "An array of entity references that the resource depends on to function.",
               "items": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "pattern": "\\b(?:api|component|domain|resource|system)\\b:(?:\\bdefault\\/\\b)?.+",
+                "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+                "examples": [
+                  "resource:default/launchdarkly",
+                  "component:front-end-tooling-mfe"
+                ]
               }
             },
             "system": {
               "type": "string",
               "description": "An entity reference to the system that the resource belongs to.",
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "\\b(?:system)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: 'system:[<optional-namespace>/]<system-name>'",
+              "examples": [
+                "system:default/appointment-mananager",
+                "system:appointment-manager"
+              ]
             }
           }
         }
