@@ -1,0 +1,195 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "Entity.schema.json",
+    "$comment": "Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.",
+    "description": "The parts of the format that's common to all versions/kinds of entity. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/common/",
+    "examples": [
+        {
+            "apiVersion": "backstage.io/v1alpha1",
+            "kind": "Component",
+            "metadata": {
+                "name": "LoremService",
+                "description": "Creates Lorems like a pro.",
+                "annotations": {
+                    "docs": "https://github.com/..../tree/develop/doc"
+                }
+            },
+            "spec": {
+                "type": "service",
+                "lifecycle": "production",
+                "owner": "tools"
+            }
+        }
+    ],
+    "type": "object",
+    "required": [
+        "apiVersion",
+        "kind",
+        "metadata"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "apiVersion": {
+            "type": "string",
+            "description": "The version of specification format for this particular entity that this is written against.",
+            "minLength": 1,
+            "examples": [
+                "backstage.io/v1alpha1",
+                "my-company.net/v1",
+                "1.0"
+            ]
+        },
+        "kind": {
+            "type": "string",
+            "description": "The high level entity type being described.",
+            "minLength": 1,
+            "examples": [
+                "API",
+                "Component",
+                "Domain",
+                "Resource",
+                "System"
+            ]
+        },
+        "metadata": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "$id": "EntityMeta",
+            "description": "Metadata fields common to all versions/kinds of entity.",
+            "examples": [
+                {
+                    "uid": "e01199ab-08cc-44c2-8e19-5c29ded82521",
+                    "etag": "lsndfkjsndfkjnsdfkjnsd==",
+                    "generation": 13,
+                    "name": "my-component-yay",
+                    "annotations": {
+                        "example.com/bindings": "are-secret"
+                    }
+                }
+            ],
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "uid": {
+                    "type": "string",
+                    "description": "A globally unique ID for the entity. This field can not be set by the user at creation time, and the server will reject an attempt to do so. The field will be populated in read operations. The field can (optionally) be specified when performing update or delete operations, but the server is free to reject requests that do so in such a way that it breaks semantics.",
+                    "examples": [
+                        "e01199ab-08cc-44c2-8e19-5c29ded82521"
+                    ],
+                    "minLength": 1
+                },
+                "etag": {
+                    "type": "string",
+                    "description": "An opaque string that changes for each update operation to any part of the entity, including metadata. This field can not be set by the user at creation time, and the server will reject an attempt to do so. The field will be populated in read operations. The field can (optionally) be specified when performing update or delete operations, and the server will then reject the operation if it does not match the current stored value.",
+                    "examples": [
+                        "lsndfkjsndfkjnsdfkjnsd=="
+                    ],
+                    "minLength": 1
+                },
+                "generation": {
+                    "type": "integer",
+                    "description": "A positive nonzero number that indicates the current generation of data for this entity; the value is incremented each time the spec changes. This field can not be set by the user at creation time, and the server will reject an attempt to do so. The field will be populated in read operations.",
+                    "examples": [
+                        1
+                    ],
+                    "minimum": 1
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the entity. Must be unique within the catalog for the given kind.",
+                    "examples": [
+                        "metadata-proxy"
+                    ],
+                    "minLength": 1
+                },
+                "title": {
+                    "type": "string",
+                    "description": "A display name of the entity, to be presented in user interfaces instead of the name property, when available.",
+                    "examples": [
+                        "React SSR Template"
+                    ],
+                    "minLength": 1
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A short (typically relatively few words, on one line) description of the entity."
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Key/value pairs of non-identifying auxiliary information attached to the entity.",
+                    "additionalProperties": true,
+                    "patternProperties": {
+                        "^.+$": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "links": {
+                    "type": "array",
+                    "description": "A list of external hyperlinks related to the entity. Links can provide additional contextual information that may be located outside of Backstage itself. For example, an admin dashboard or external CMS page.",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "url"
+                        ],
+                        "properties": {
+                            "url": {
+                                "type": "string",
+                                "description": "A url in a standard uri format.",
+                                "examples": [
+                                    "https://admin.example-org.com"
+                                ],
+                                "minLength": 1
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "A user friendly display name for the link.",
+                                "examples": [
+                                    "Admin Dashboard"
+                                ],
+                                "minLength": 1
+                            },
+                            "icon": {
+                                "type": "string",
+                                "description": "A key representing a visual icon to be displayed in the UI. There are a few out of the box you can use. You can find them at https://github.com/backstage/backstage/blob/master/packages/app-defaults/src/defaults/icons.tsx",
+                                "examples": [
+                                    "dashboard"
+                                ],
+                                "enum": [
+                                    "catalog",
+                                    "scaffolder",
+                                    "techdocs",
+                                    "search",
+                                    "chat",
+                                    "dashboard",
+                                    "docs",
+                                    "email",
+                                    "github",
+                                    "group",
+                                    "help",
+                                    "kind:api",
+                                    "kind:component",
+                                    "kind:domain",
+                                    "kind:group",
+                                    "kind:location",
+                                    "kind:system",
+                                    "kind:user",
+                                    "kind:resource",
+                                    "user",
+                                    "warning"
+                                ],
+                                "minLength": 1
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "spec": {
+            "type": "object",
+            "description": "The specification data describing the entity itself."
+        }
+    }
+}
