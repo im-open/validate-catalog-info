@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "Domain.v1alpha1.schema.json",
+  "$comment": "Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.",
+  "description": "The Domain entity type is special. We use it to define our \"ideal architectural state\", not necessarily our \"current state\". As such no repository outside of this one should define these.\r\rSystem entities that make up our \"current state\" are connected to Domain entities via the `spec.domain` attribute.\r\rOnce a Component, Resource, or API is created to implement a Domain, a System entity should be created.\r\rMore @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/domain/ .",
+  "examples": [
+    {
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "Domain",
+      "metadata": {
+        "name": "artists",
+        "description": "Everything about artists"
+      },
+      "spec": {
+        "owner": "artist-relations-team"
+      }
+    }
+  ],
+  "allOf": [
+    {
+      "$ref": "Entity.schema.json"
+    },
+    {
+      "type": "object",
+      "required": ["spec"],
+      "properties": {
+        "apiVersion": {
+          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
+        },
+        "kind": {
+          "enum": ["Domain"]
+        },
+        "spec": {
+          "type": "object",
+          "required": ["type", "owner"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of Domain.\nMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/domain .",
+              "examples": ["Core", "External", "Generic", "Supporting"],
+              "enum": ["Core", "External", "Generic", "Supporting"],
+              "minLength": 1
+            },
+            "owner": {
+              "type": "string",
+              "description": "An entity reference to the owner of the Domain.\r\rThis is required because - unlike APIs, Components, Systems and Resources - we load all Domains centrally from the im-practices/techhub repository as representations of our desired future-state bounded context map. So, the owner of a Domain cannot be determined via a host repository's CODEOWNERS file.",
+              "examples": ["artist-relations-team", "user:john.johnson"],
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  ]
+}
