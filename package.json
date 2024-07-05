@@ -1,0 +1,23 @@
+{
+  "name": "javascript-action-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm ci && esbuild ./src/main.js --bundle --platform=node --outfile=dist/index.js && npm run format && git add dist/*",
+    "bundle": "esbuild ./src/main.js --bundle --platform=node --outfile=dist/index.js",
+    "format": "prettier --write **/*.js",
+    "format-check": "prettier --check **/*.js"
+  },
+  "keywords": [],
+  "author": "wtw",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.10.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.12.29",
+    "install": "^0.13.0",
+    "prettier": "^2.7.1"
+  }
+}
