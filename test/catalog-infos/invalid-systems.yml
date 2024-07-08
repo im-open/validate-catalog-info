@@ -1,0 +1,62 @@
+# These entities are meant to be general and to exercise the code
+# that sets up the validationprior to ajv's schema validation
+
+# Doc 1 - Valid System
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management
+spec:
+  owner: group:default/customization
+  domain: domain:default/content-management
+...
+---
+# Doc 2 - This is comments
+# For more information on catalog-info.yml files, visit the TechHub
+# https://techhub.mktp.io/docs/default/system/techhub/catalog-info-guidelines/
+...
+---
+# Doc 3 - Empty spec
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-3
+spec:
+...
+---
+# Doc 4 - Empty spec.owner
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-4
+spec:
+  owner:
+...
+---
+# Doc 5 - Invalid spec.owner pattern
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-5
+spec:
+  owner: content-management
+...
+---
+# Doc 6 - Empty spec.domain
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-6
+spec:
+  domain:
+...
+---
+# Doc 7 - Invalid spec.domain pattern
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-7
+spec:
+  domain: content-management-domain
+...
+

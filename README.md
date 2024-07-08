@@ -1,10 +1,19 @@
-# javascript-action-template
+# validate-catalog-info-file
 
-This template can be used to quickly start a new custom js action repository.  Click the `Use this template` button at the top to get started.
+This action validates the contents of a `catalog-info.yml` file.  This action can be used during CI or other workflows to ensure the ongoing validity of the file.  
+
+The action uses the schema defined in the [catalogInfoSchema] directory for validation.
+
+> [!NOTE]
+> The action does require the `catalog-info.yml` file to exist on disk prior to running this validation action.
+
+The action creates [error annotations] for every validation error it finds and a [warning annotation] for each invalid yaml document inside the `catalog-info.yml`.  GitHub has [annotation limits]  of 10 error and 10 warning annotations per step though, so only 10 errors and 10 warnings will can be shown on the `catalog-info.yml` file or on the workflow summary.  The workflow log still shows all errors.  
+
+To address the limitation with the number of annotations, an `errors-markdown` output is available with the generated markdown for all errors detected in the file.  A job summary is created automatically with the same markdown unless `generate-job-summary` is set to `false`.
 
 ## Index <!-- omit in toc -->
 
-- [javascript-action-template](#javascript-action-template)
+- [validate-catalog-info-file](#validate-catalog-info-file)
   - [Inputs](#inputs)
   - [Outputs](#outputs)
   - [Usage Examples](#usage-examples)
@@ -17,81 +26,47 @@ This template can be used to quickly start a new custom js action repository.  C
   - [Code of Conduct](#code-of-conduct)
   - [License](#license)
 
-## TODOs <!-- omit in toc -->
-
-- README.md
-  - [ ] Update the Inputs section with the correct action inputs
-  - [ ] Update the Outputs section with the correct action outputs
-  - [ ] Update the Usage Example section with the correct usage
-- package.json
-  - [ ] Update the `name` with the new action value
-- src/main.js
-  - [ ] Implement your custom javascript action
-- action.yml
-  - [ ] Fill in the correct name, description, inputs and outputs
-- .prettierrc.json
-  - [ ] Update any preferences you might have
-- CODEOWNERS
-  - [ ] Update as appropriate
-- Repository Settings
-  - [ ] On the *Options* tab check the box to *Automatically delete head branches*
-  - [ ] On the *Options* tab update the repository's visibility (must be done by an org owner)
-  - [ ] On the *Branches* tab add a branch protection rule
-    - [ ] Check *Require pull request reviews before merging*
-    - [ ] Check *Dismiss stale pull request approvals when new commits are pushed*
-    - [ ] Check *Require review from Code Owners*
-    - [ ] Check *Require status checks to pass before merging*
-    - [ ] Check *Require branches to be up to date before merging*
-    - [ ] Add `build` to the list of required status checks.  This will need to be done after the first `build` workflow runs.
-    - [ ] Check *Do not allow bypassing the above settings*
-  - [ ] On the *Manage Access* tab add the appropriate groups
-- About Section (accessed on the main page of the repo, click the gear icon to edit)
-  - [ ] The repo should have a short description of what it is for
-  - [ ] Add one of the following topic tags:
-    | Topic Tag       | Usage                                    |
-    |-----------------|------------------------------------------|
-    | az              | For actions related to Azure             |
-    | code            | For actions related to building code     |
-    | certs           | For actions related to certificates      |
-    | db              | For actions related to databases         |
-    | git             | For actions related to Git               |
-    | iis             | For actions related to IIS               |
-    | microsoft-teams | For actions related to Microsoft Teams   |
-    | svc             | For actions related to Windows Services  |
-    | jira            | For actions related to Jira              |
-    | meta            | For actions related to running workflows |
-    | pagerduty       | For actions related to PagerDuty         |
-    | test            | For actions related to testing           |
-    | tf              | For actions related to Terraform         |
-  - [ ] Add any additional topics for an action if they apply
-  - [ ] The Packages and Environments boxes can be unchecked
-- Search for any remaining TODOs and address them.
-
 ## Inputs
 
-| Parameter | Is Required | Default | Description           |
-|-----------|-------------|---------|-----------------------|
-| `input`   | true        |         | Description goes here |
+| Parameter              | Is Required | Default              | Description                                                                                                                                                                                                                                                                                          |
+|------------------------|-------------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `filename`             | false       | `./catalog-info.yml` | The name of the `catalog-info.yml` file.                                                                                                                                                                                                                                                             |
+| `fail-if-errors`       | false       | true                 | Error annotations are created for each validation error in the `catalog-info.yml` file but these errors won't cause the action to fail on their own.  If this flag is set the action will be marked as a failure if the `catalog-info.yml` file is missing, empty or contains any validation errors. |
+| `generate-job-summary` | false       | true                 | Flag that determines whether a job summary containing validation errors will be created.<ul><li>Only applicable when the file is invalid.</li><li>This is the same markdown data that is provided in the `errors-markdown` output.</li></ul>                                                         |
 
 ## Outputs
 
-| Output   | Description           | Possible Values |
-|----------|-----------------------|-----------------|
-| `output` | Description goes here |                 |
+| Output            | Description                                                                                                                                                                                                           | Possible Values |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| `is-valid`        | A flag indicating whether the `catalog-info.yml` file is valid or not.                                                                                                                                                | true or false   |
+| `errors-markdown` | A markdown fragment containing the list of all validation errors in the `catalog-info.yml` file.  output is provided because GitHub limits the number of error annotations that can be created in a single run to 10. | true or false   |
 
 ## Usage Examples
 
 ```yml
 jobs:
-  jobname: # TODO: fix the job name
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
+  validate-catalog-info:
+    runs-on: ubuntu-latest
 
-      - name: ''
-        uses: im-open/thisrepo@v1.0.0 # TODO:  fix the action name
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate catalog-info.yml
+        id: catalogInfo
+        uses: im-open/validate-catalog-info-file@v1
         with:
-          input: ''
+          filename: ./docs/catalog-info.yml # Defaults to ./catalog-info.yml
+          fail-if-errors: false             # Defaults to true
+          generate-job-summary: false       # Defaults to true
+
+      - name: Add PR comment if catalog-info.yml is invalid
+        if: steps.catalogInfo.outputs.is-valid == 'false'
+        uses: im-open/update-pr-comment@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Special per-job token generated by GH for interacting with the repo
+          comment-identifier: catalog-info-errors
+          comment-content: ${{ steps.catalogInfo.outputs.errors-markdown }}
 ```
 
 ## Contributing
@@ -159,3 +134,7 @@ Copyright &copy; 2023, Extend Health, LLC. Code released under the [MIT license]
 [increment-version-on-merge]: ./.github/workflows/increment-version-on-merge.yml
 [esbuild]: https://esbuild.github.io/getting-started/#bundling-for-node
 [git-version-lite]: https://github.com/im-open/git-version-lite
+[catalogInfoSchema]: ./catalogInfoSchema/CatalogInfo.schema.json
+[error annotations]: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-creating-an-annotation-for-an-error
+[warning annotation]: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-a-warning-message
+[annotation limits]: https://github.com/actions/toolkit/blob/main/docs/problem-matchers.md#limitations

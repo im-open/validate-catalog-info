@@ -1,0 +1,91 @@
+# These entities are meant to be general and to exercise the code
+# that sets up the validationprior to ajv's schema validation
+
+# Doc 1 - Valid Domain
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain
+spec:
+  type: Core
+  owner: group:default/customization
+...
+---
+
+# Doc 2 - This is comments
+# For more information on catalog-info.yml files, visit the TechHub
+# https://techhub.mktp.io/docs/default/system/techhub/catalog-info-guidelines/
+...
+---
+
+# Doc 3 - Empty spec
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-3
+spec:
+...
+---
+
+# Doc 4 - Missing spec.owner
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-4
+spec:
+  type: External
+...
+---
+# Doc 5 - Empty spec.owner
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-5
+spec:
+  owner:
+  type: External
+...
+---
+# Doc 6 - Invalid spec.owner pattern
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-6
+spec:
+  owner: content-management
+  type: Generic
+...
+---
+
+# Doc 7 - Missing spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-7
+spec:
+  owner: group:default/content-management
+...
+---
+
+# Doc 8 - Empty spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-8
+spec:
+  owner: group:default/content-management
+  type:
+...
+---
+
+# Doc 9 - Invalid spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-9
+spec:
+  owner: group:default/content-management
+  type: invalidThing
+...
+---
+
