@@ -28,9 +28,6 @@
       "type": "object",
       "required": ["spec"],
       "properties": {
-        "apiVersion": {
-          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
-        },
         "kind": {
           "enum": ["API"]
         },
@@ -41,21 +38,16 @@
             "type": {
               "type": "string",
               "description": "The type of the API definition. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/api/#property-value-restrictions .",
-              "examples": ["openapi", "asyncapi"],
-              "enum": ["openapi", "asyncapi"],
-              "minLength": 1
+              "enum": ["openapi", "asyncapi"]
             },
             "lifecycle": {
               "type": "string",
               "description": "The lifecycle state of the API. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/api/#property-value-restrictions .",
-              "examples": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"],
-              "enum": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"],
-              "minLength": 1
+              "enum": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"]
             },
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the API.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "minLength": 1,
               "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
               "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
               "examples": [
@@ -68,7 +60,6 @@
             "system": {
               "type": "string",
               "description": "An entity reference to the system that the API belongs to.",
-              "minLength": 1,
               "pattern": "\\b(?:system)\\b:(?:\\bdefault\\/\\b)?.+",
               "$comment": "Expected Pattern: 'system:[<optional-namespace>/]<system-name>'",
               "examples": [
@@ -117,9 +108,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "$comment": "Is required and must be a string or an object with a $text, $json, or $yaml property."
             }
-          }
+          },
+          "$comment": "It should contain definition, lifecycle, system, and type properties and may contain an optional owner prop."
         }
       }
     }

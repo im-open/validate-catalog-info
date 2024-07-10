@@ -20,9 +20,6 @@
     {
       "type": "object",
       "properties": {
-        "apiVersion": {
-          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
-        },
         "kind": {
           "enum": ["System"]
         },
@@ -32,7 +29,6 @@
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the System.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "minLength": 1,
               "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
               "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
               "examples": [
@@ -45,14 +41,15 @@
             "domain": {
               "type": "string",
               "description": "An entity reference to the domain that the system belongs to.",
+              "pattern": "\\b(?:domain)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: 'domain:[<optional-namespace>/]<domain-name>'",
               "examples": [
                 "domain:default/front-end-tooling",
-                "domain:default/content-management",
-                "domain:default/telephony"
-              ],
-              "minLength": 1
+                "domain:content-management"
+              ]
             }
-          }
+          },
+          "$comment": "It should contain at least one optional domain or owner property or be removed completely."
         }
       }
     }

@@ -14,7 +14,6 @@
     "apiVersion": {
       "type": "string",
       "description": "The version of specification format for this particular entity that this is written against.",
-      "minLength": 1,
       "enum": [
         "backstage.io/v1alpha1",
         "backstage.io/v1beta1"
@@ -23,7 +22,6 @@
     "kind": {
       "type": "string",
       "description": "The high level entity type being described.",
-      "minLength": 1,
       "enum": [
         "API",
         "Component",
@@ -79,7 +77,8 @@
             "^.+$": {
               "type": "string"
             }
-          }
+          },
+          "$comment": "The object should be populated with key value pairs containing auxiliary information attached to the entity or be removed completely."
         },
         "links": {
           "type": "array",
@@ -131,13 +130,14 @@
                   "kind:resource",
                   "user",
                   "warning"
-                ],
-                "minLength": 1
+                ]
               }
-            }
+            },
+            "$comment": "Links is optional but cannot be empty.  If present, it should contain a list of link items.  Each link item has a required url property and optional title and icon props."
           }
         }
-      }
+      },
+      "$comment": "The metadata object requires a name property."
     },
     "spec": {
       "type": "object",
