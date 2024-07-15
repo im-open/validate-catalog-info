@@ -22,4 +22,4 @@
   - Expected Pattern: `<kind>:[<optional-namespace>/]<entity-name>` e.g. **group:default/ce2**, **group:ce2**, **user:RyanHauert**, **user:default/RyanHauert**
 - Doc 15, Line 198, `API[content-mgmt-api-15]/spec` must have required property **definition**.
 - Doc 16, Line 216, `API[content-mgmt-api-16]/spec/definition` Is required and must be a string or an object with a $text, $json, or $yaml property.
-  - See the [catalog info schema](https://github.com/im-open/validate-catalog-info-file/blob/main/catalogInfoSchema/CatalogInfo.schema.json) for details and examples.
+  - See the [catalog info schema](https://github.com/im-open/validate-catalog-info-file/blob/main/schema/CatalogInfo.schema.json) for details and examples.

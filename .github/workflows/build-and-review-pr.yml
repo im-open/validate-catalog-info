@@ -68,7 +68,7 @@ jobs:
       # execution should be included like src or dist.  Do not include dirs like .github or node_modules.
       # The format of this input is a comma-separated string.
       # ** This value must match the same dirs-with-code argument specified in increment-version-on-merge.yml.
-      dirs-with-code: 'src,dist,catalogInfoSchema'
+      dirs-with-code: 'src,dist,schema'
 
       # The npm script to run to build the action.  This is typically 'npm run build' if the
       # action needs to be compiled.  For composite-run-steps actions this is typically empty.

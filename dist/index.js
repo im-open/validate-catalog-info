@@ -28994,9 +28994,9 @@ var require_ajv = __commonJS({
   }
 });
 
-// catalogInfoSchema/CatalogInfo.schema.json
+// schema/CatalogInfo.schema.json
 var require_CatalogInfo_schema = __commonJS({
-  'catalogInfoSchema/CatalogInfo.schema.json'(exports2, module2) {
+  'schema/CatalogInfo.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'root',
@@ -29014,9 +29014,9 @@ var require_CatalogInfo_schema = __commonJS({
   }
 });
 
-// catalogInfoSchema/API.v1alpha1.schema.json
+// schema/API.v1alpha1.schema.json
 var require_API_v1alpha1_schema = __commonJS({
-  'catalogInfoSchema/API.v1alpha1.schema.json'(exports2, module2) {
+  'schema/API.v1alpha1.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'API.v1alpha1.schema.json',
@@ -29136,9 +29136,9 @@ var require_API_v1alpha1_schema = __commonJS({
   }
 });
 
-// catalogInfoSchema/Component.v1alpha1.schema.json
+// schema/Component.v1alpha1.schema.json
 var require_Component_v1alpha1_schema = __commonJS({
-  'catalogInfoSchema/Component.v1alpha1.schema.json'(exports2, module2) {
+  'schema/Component.v1alpha1.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'Component.v1alpha1.schema.json',
@@ -29267,9 +29267,9 @@ var require_Component_v1alpha1_schema = __commonJS({
   }
 });
 
-// catalogInfoSchema/Domain.v1alpha1.schema.json
+// schema/Domain.v1alpha1.schema.json
 var require_Domain_v1alpha1_schema = __commonJS({
-  'catalogInfoSchema/Domain.v1alpha1.schema.json'(exports2, module2) {
+  'schema/Domain.v1alpha1.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'Domain.v1alpha1.schema.json',
@@ -29328,9 +29328,9 @@ var require_Domain_v1alpha1_schema = __commonJS({
   }
 });
 
-// catalogInfoSchema/Resource.v1alpha1.schema.json
+// schema/Resource.v1alpha1.schema.json
 var require_Resource_v1alpha1_schema = __commonJS({
-  'catalogInfoSchema/Resource.v1alpha1.schema.json'(exports2, module2) {
+  'schema/Resource.v1alpha1.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'Resource.v1alpha1.schema.json',
@@ -29425,9 +29425,9 @@ var require_Resource_v1alpha1_schema = __commonJS({
   }
 });
 
-// catalogInfoSchema/System.v1alpha1.schema.json
+// schema/System.v1alpha1.schema.json
 var require_System_v1alpha1_schema = __commonJS({
-  'catalogInfoSchema/System.v1alpha1.schema.json'(exports2, module2) {
+  'schema/System.v1alpha1.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'System.v1alpha1.schema.json',
@@ -29482,9 +29482,9 @@ var require_System_v1alpha1_schema = __commonJS({
   }
 });
 
-// catalogInfoSchema/Entity.schema.json
+// schema/Entity.schema.json
 var require_Entity_schema = __commonJS({
-  'catalogInfoSchema/Entity.schema.json'(exports2, module2) {
+  'schema/Entity.schema.json'(exports2, module2) {
     module2.exports = {
       $schema: 'http://json-schema.org/draft-07/schema#',
       $id: 'Entity.schema.json',
@@ -29630,8 +29630,8 @@ var require_validate2 = __commonJS({
     var resourceSchema = require_Resource_v1alpha1_schema();
     var systemSchema = require_System_v1alpha1_schema();
     var entitySchema = require_Entity_schema();
-    var SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/catalogInfoSchema/CatalogInfo.schema.json';
-    var API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/catalogInfoSchema/API.v1alpha1.schema.json';
+    var SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/schema/CatalogInfo.schema.json';
+    var API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/schema/API.v1alpha1.schema.json';
     function setupAjvSchemaValidation2(Ajv2) {
       const ajv = new Ajv2({
         allErrors: true,

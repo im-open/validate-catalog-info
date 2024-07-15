@@ -2,7 +2,7 @@
 
 This action validates the contents of a `catalog-info.yml` file.  This action can be used during CI or other workflows to ensure the ongoing validity of the file.  
 
-The action uses the schema defined in the [catalogInfoSchema] directory for validation.
+The action uses the files defined in the [schema] directory for validation.
 
 > [!NOTE]
 > The action does require the `catalog-info.yml` file to exist on disk prior to running this validation action.
@@ -134,7 +134,7 @@ Copyright &copy; 2023, Extend Health, LLC. Code released under the [MIT license]
 [increment-version-on-merge]: ./.github/workflows/increment-version-on-merge.yml
 [esbuild]: https://esbuild.github.io/getting-started/#bundling-for-node
 [git-version-lite]: https://github.com/im-open/git-version-lite
-[catalogInfoSchema]: ./catalogInfoSchema/CatalogInfo.schema.json
+[schema]: ./schema/CatalogInfo.schema.json
 [error annotations]: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-creating-an-annotation-for-an-error
 [warning annotation]: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-a-warning-message
 [annotation limits]: https://github.com/actions/toolkit/blob/main/docs/problem-matchers.md#limitations

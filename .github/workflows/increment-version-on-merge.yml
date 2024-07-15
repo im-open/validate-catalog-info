@@ -47,4 +47,4 @@ jobs:
       # execution should be included like src or dist.  Do not include dirs like .github or node_modules.
       # The format of this input is a comma-separated string.
       # ** This value must match the same dirs-with-code argument specified in build-and-review-pr.yml.
-      dirs-with-code: 'src,dist,catalogInfoSchema'
+      dirs-with-code: 'src,dist,schema'
