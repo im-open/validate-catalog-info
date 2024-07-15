@@ -1,0 +1,145 @@
+# These entities are meant to be general and to exercise the code
+# that sets up the validationprior to ajv's schema validation
+
+# Doc 1 - Valid Entity
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management
+  title: Content Management
+  additional-prop: allowed
+
+...
+---
+
+# Doc 2 - This is comments
+# For more information on catalog-info.yml files, visit the TechHub
+# https://techhub.mktp.io/docs/default/system/techhub/catalog-info-guidelines/
+...
+---
+
+# Doc 3 - Missing apiVersion prop
+kind: System
+metadata:
+  name: content-management-3
+...
+
+---
+
+# Doc 4 - Empty apiVersion prop
+apiVersion: 
+kind: System
+metadata:
+  name: content-management-4
+---
+
+# Doc 5 - Invalid apiVersion (not one of the allowed values)
+apiVersion: invalid.version.io/v5
+kind: System
+metadata:
+  name: content-management-5
+...
+---
+
+# Doc 6 - Missing kind prop
+apiVersion: backstage.io/v1alpha1
+metadata:
+  name: content-management-6
+...
+---
+
+# Doc 7 - Empty kind prop
+apiVersion: backstage.io/v1alpha1
+kind: 
+metadata:
+  name: content-management-7
+...
+---
+# Doc 8 - Invalid kind prop (not one of the allowed values)
+apiVersion: backstage.io/v1alpha1
+kind: Thing
+metadata:
+  name: content-management-8
+
+...
+
+---
+
+# Doc 9 - Missing metadata
+apiVersion: backstage.io/v1alpha1
+kind: System
+
+...
+---
+
+# Doc 10 - Empty metadata object
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+...
+---
+# Doc 11 - Empty metadata.name prop
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name:
+...
+---
+
+# Doc 12 - Empty metadata.title (when present, minLength=1)
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-12
+  title: ''
+...
+---
+
+# Doc 13 - Invalid metadata.annotations structure
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-13
+  annotations:
+    thing
+...
+---
+
+# Doc 14 - Empty metadata.links
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-14
+  links:
+...
+---
+
+# Doc 15 - Invalid metadata.links (missing url, empty title and empty icon and invalid icon)
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-15
+  links:
+    # 0 - Missing url prop
+    - title: 'missing url'
+    # 1 - Empty url prop
+    - url: ''
+    # 2 - Empty title
+    - url: https:content-management.io
+      title: ''
+    # 3 - Empty icon
+    - url: https:content-management.io
+      icon: ''
+    # 4 - Invalid icon value
+    - url: https:content-management.io
+      icon: 'description'
+...
+---
+
+# Doc 16 - Has additional properties
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-16
+extra-props: not-allowed
+...

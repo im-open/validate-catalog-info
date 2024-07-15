@@ -1,16 +1,40 @@
-name: 'JavaScript Action Template'
+name: 'validate-catalog-info-file'
 
-description: 'Add description here'
+description: 'Action that validates the contents of a catalog-info.yml file.'
 
 inputs:
-  input-1:
-    description: 'Add a description here'
-    required: true
+  filename:
+    description: |
+      The name of the `catalog-info.yml` file.
+      Defaults to `./catalog-info.yml`.
+    required: false
+    default: './catalog-info.yml'
+  fail-if-errors:
+    description: |
+      Error annotations are created for each validation error in the `catalog-info.yml` file but 
+      these errors won't cause the action to fail on their own.  If this flag is set the action 
+      will be marked as a failure if the `catalog-info.yml` file is missing, empty or contains 
+      any of those validation errors.
+    required: false
+    default: 'true'
+  generate-job-summary:
+    description: |
+      Flag that determines whether a job summary containing validation errors will be created.
+      This is the same markdown data that is provided in the `errors-markdown` output.
+      Only applicable when the file is invalid.  
+      Defaults to true.
+    required: false
+    default: 'true'
 
 outputs:
-  output-1:
-    description: 'Add a description here'
-
+  is-valid:
+    description: 'A flag indicating whether the `catalog-info.yml` file is valid or not.'
+  errors-markdown:
+    description: |
+      A markdown fragment containing the list of all validation errors in the `catalog-info.yml` 
+      file. This output is provided because GitHub limits the number of error annotations that 
+      can be created in a single run to 10.
+  
 runs:
   using: 'node20'
   main: 'dist/index.js'

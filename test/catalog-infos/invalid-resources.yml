@@ -1,0 +1,179 @@
+# These entities are meant to be general and to exercise the code
+# that sets up the validationprior to ajv's schema validation
+
+# Doc 1 - Valid Resource
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db
+  deployment-environments:
+    - Dev
+    - QA
+    - Prod
+spec:
+  type: database
+  system: system:default/content
+  owner: group:default/customization
+  dependsOn:
+    - component:default/content-mgmt-mfe
+...
+
+---
+# Doc 2 - This is comments
+# For more information on catalog-info.yml files, visit the TechHub
+# https://techhub.mktp.io/docs/default/system/techhub/catalog-info-guidelines/
+...
+
+---
+# Doc 3 - Empty metadata.deployment-environments
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-3
+  deployment-environments:
+spec:
+  type: database
+  system: system:default/customization
+...
+
+---
+# Doc 4 - metadata.deployment-environments with duplicate entries
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-4
+  deployment-environments:
+    - Dev
+    - QA
+    - Dev
+    - Prod
+spec:
+  type: database
+  system: system:default/customization
+...
+
+---
+# Doc 5 - Empty spec
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-5
+spec:
+...
+
+---
+# Doc 6 - Missing spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-6
+spec:
+  #type: database
+  system: system:default/content-management
+...
+
+---
+# Doc 7 - Empty spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-7
+spec:
+  type: ''
+  system: system:default/content-management
+...
+
+---
+# Doc 8 - Invalid spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-8
+spec:
+  type: InvalidResourceType
+  system: system:default/content-management
+...
+
+---
+# Doc 9 - Missing spec.system
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-9
+spec:
+  type: database
+  #system: system:default/content-management
+...
+
+---
+# Doc 10 - Empty spec.system
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-10
+spec:
+  type: database
+  system: ' '
+...
+
+---
+# Doc 11 - Invalid spec.system pattern
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-11
+spec:
+  type: database
+  system: content-management
+...
+
+---
+# Doc 12 - Empty spec.owner
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-12
+spec:
+  type: database
+  system: system:default/content-management
+  owner:
+...
+
+---
+# Doc 13 - Invalid spec.owner pattern
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-13
+spec:
+  type: database
+  system: system:default/content-management
+  owner: customization
+...
+
+---
+# Doc 14 - Empty spec.dependsOn
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-14
+spec:
+  type: database
+  system: system:default/content-management
+  dependsOn:
+...
+
+---
+# Doc 15 - Invalid spec.dependsOn items
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db-15
+spec:
+  type: database
+  system: system:default/content-management
+  dependsOn:
+    - ''
+    - content-management-service  # Not in the right format
+    - group:default/customization # Right format but not a valid entity to depend on
+...

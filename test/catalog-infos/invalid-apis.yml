@@ -1,0 +1,217 @@
+# These entities are meant to be general and to exercise the code
+# that sets up the validationprior to ajv's schema validation
+
+# Doc 1 - Valid API
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  owner: group:default/customization
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 2 - This is comments
+# For more information on catalog-info.yml files, visit the TechHub
+# https://techhub.mktp.io/docs/default/system/techhub/catalog-info-guidelines/
+...
+
+---
+# Doc 3 - Empty spec
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-3
+spec:
+...
+
+---
+# Doc 4 - Missing spec.type
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-4
+spec:
+  #type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 5 - Empty spec.type
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-5
+spec:
+  type: ''
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 6 - Invalid spec.type
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-6
+spec:
+  type: myapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 7 - Missing spec.lifecycle
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-7
+spec:
+  type: openapi
+  #lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 8 - Empty spec.lifecycle
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-8
+spec:
+  type: openapi
+  lifecycle: 
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 9 - Invalid spec.lifecycle
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-9
+spec:
+  type: openapi
+  lifecycle: mylifecycle
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 10 - Missing spec.system
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-8
+spec:
+  type: openapi
+  lifecycle: maintaining
+  # system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 11 - Empty spec.system
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-11
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: 
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 12 - Invalid spec.system pattern
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-11
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 13 - Empty spec.owner
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-13
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  owner:
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Content Management API API
+      version: 0.0.0
+...
+
+---
+# Doc 14 - Invalid spec.owner pattern
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-14
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  owner: customization
+  definition: 
+    $text: https://github.com/im-open/content-management-service/blob/main/asyncapi-document.yaml
+...
+
+---
+# Doc 15 - Missing spec.definition
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-15
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  #definition: 
+  #  $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 16 - Empty spec.definition
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-16
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+...

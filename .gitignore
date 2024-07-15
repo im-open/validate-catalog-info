@@ -1,2 +1,5 @@
 node_modules/
 /.vscode/launch.json
+/catalog-info-adjusted.yml
+/errors-markdown.md
+/pull-request.json

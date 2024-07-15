@@ -1,0 +1,11 @@
+
+
+# Doc 1 - Valid Domain
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: management-domain
+spec:
+  type: Core
+  owner: group:default/customization
+

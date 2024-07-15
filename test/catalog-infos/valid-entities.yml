@@ -1,0 +1,74 @@
+# Doc 1 - Valid Domain
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: management-domain
+spec:
+  type: Core
+  owner: group:default/customization
+...
+---
+# Doc 2 - Valid System
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management
+spec:
+  owner: group:default/customization
+  domain: domain:default/management-domain
+...
+---
+# Doc 3 - Valid Component
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-api
+  deployment-environments:
+    - Dev
+    - QA
+    - Prod
+spec:
+  type: service
+  lifecycle: maintaining
+  system: system:default/content-management
+  owner: group:default/customization
+  subcomponentOf: component:default/content-management
+  providesApis:
+    - api:default/content-mgmt-api
+  consumesApis:
+    - api:default/customization-service
+  dependsOn:
+    - resource:default/content-mgmt-db
+...
+---
+# Doc 5 - Valid API
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  owner: group:default/customization
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+---
+# Doc 4 - Valid Resource
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: content-mgmt-db
+  deployment-environments:
+    - Dev
+    - QA
+    - Prod
+spec:
+  type: database
+  system: system:default/content-management
+  owner: group:default/customization
+  dependsOn:
+    - component:default/content-mgmt-mfe
+...
+---

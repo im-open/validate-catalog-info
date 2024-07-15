@@ -1,0 +1,315 @@
+# These entities are meant to be general and to exercise the code
+# that sets up the validationprior to ajv's schema validation
+
+# Doc 1 - Valid Component
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe
+  deployment-environments:
+    - Dev
+    - QA
+    - Prod
+spec:
+  type: mfe
+  lifecycle: maintaining
+  system: system:default/content-management
+  owner: group:default/customization
+  subcomponentOf: component:default/management
+  providesApis:
+    - api:default/content-mgmt-service
+  consumesApis:
+    - api:default/customization-service
+  dependsOn:
+    - resource:default/content-mgmt-db
+...
+
+---
+# Doc 2 - This is comments
+# For more information on catalog-info.yml files, visit the TechHub
+# https://techhub.mktp.io/docs/default/system/techhub/catalog-info-guidelines/
+...
+
+---
+# Doc 3 - Empty metadata.deployment-environments
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-3
+  deployment-environments:
+spec:
+  type: service
+  system: system:default/customization
+  lifecycle: maintaining
+...
+
+---
+# Doc 4 - metadata.deployment-environments with duplicate entries
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-4
+  deployment-environments:
+    - Dev
+    - QA
+    - Dev
+    - Prod
+spec:
+  type: library
+  system: system:default/customization
+  lifecycle: maintaining
+...
+
+---
+# Doc 5 - Empty spec
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-5
+spec:
+...
+
+---
+# Doc 6 - Missing spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-6
+spec:
+  #type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 7 - Empty spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-7
+spec:
+  type: ''
+  system: system:default/content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 8 - Invalid spec.type
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-8
+spec:
+  type: InvalidResourceType
+  system: system:default/content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 9 - Missing spec.system
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-9
+spec:
+  type: documentation
+  #system: system:default/content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 10 - Empty spec.system
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-10
+spec:
+  type: tool
+  system: ' '
+  lifecycle: maintaining
+...
+
+---
+# Doc 11 - Invalid spec.system pattern
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-11
+spec:
+  type: mfe
+  system: content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 12 - Missing spec.lifecycle
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-12
+spec:
+  type: site
+  system: system:default/content-management
+  #lifecycle: maintaining
+...
+
+---
+# Doc 13 - Empty spec.lifecycle
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-13
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle:
+...
+
+---
+# Doc 14 - Invalid spec.lifecycle pattern
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-14
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: prod
+...
+
+---
+# Doc 15 - Empty spec.owner
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-15
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  owner:
+...
+
+---
+# Doc 16 - Invalid spec.owner pattern
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-16
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  owner: customization
+...
+
+---
+# Doc 17 - Empty spec.subcomponentOf
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-17
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  subcomponentOf:
+...
+
+---
+# Doc 18 - Invalid spec.subcomponentOf items
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-18
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  subcomponentOf: content-management-db # Not in the right format
+...
+---
+# Doc 19 - Empty spec.providesApis
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-19
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  providesApis:
+...
+
+---
+# Doc 20 - Invalid spec.providesApis items
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-20
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  providesApis:
+    - ''                                     # Cannot be empty 
+    - content-management-db                  # Not in the right format
+    - resource:default/content-management-db # Right format but not a valid entity to depend on
+...
+---
+# Doc 21 - Empty spec.consumesApis
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-21
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  consumesApis:
+...
+
+---
+# Doc 22 - Invalid spec.consumesApis items
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-22
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  consumesApis:
+    - ''                                     # Cannot be empty 
+    - content-management-db                  # Not in the right format
+    - resource:default/content-management-db # Right format but not a valid entity to depend on
+...
+---
+# Doc 23 - Empty spec.dependsOn
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-23
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  dependsOn:
+...
+
+---
+# Doc 24 - Invalid spec.dependsOn items
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-24
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  dependsOn:
+    - ''                           # Cannot be empty 
+    - content-management-db        # Not in the right format
+    - group:default/customization  # Right format but not a valid entity to depend on
+...
+---

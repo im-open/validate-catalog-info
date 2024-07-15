@@ -21,6 +21,17 @@ on:
   #   without disabling that requirement.  If we have a status check that is always produced,
   #   we can also use that to require all branches be up to date before they are merged.
 
+env:
+  MISSING_MD_FILE: './test/expected-markdown/missing-file.md'
+  EMPTY_MD_FILE: './test/expected-markdown/empty.md'
+  COMMENTS_MD_FILE: './test/expected-markdown/comments-only.md'
+  ENTITIES_MD_FILE: './test/expected-markdown/invalid-entities.md'
+  SYSTEMS_MD_FILE: './test/expected-markdown/invalid-systems.md'
+  DOMAINS_MD_FILE: './test/expected-markdown/invalid-domains.md'
+  RESOURCES_MD_FILE: './test/expected-markdown/invalid-resources.md'
+  COMPONENTS_MD_FILE: './test/expected-markdown/invalid-components.md'
+  APIS_MD_FILE: './test/expected-markdown/invalid-apis.md'
+  
 jobs:
   build-and-review-pr:
     # This reusable workflow will check to see if an action's source code has changed based on
@@ -51,49 +62,489 @@ jobs:
       # Files do not need to be explicitly provided here if they fall under one of the dirs in dirs-with-code.
       # The format of this input is a comma-separated string.
       # ** This value must match the same files-with-code argument specified in increment-version-on-merge.yml.
-      files-with-code: 'action.yml,package.json,package-lock.json' # TODO:  Update if there are additional files or scripts.
+      files-with-code: 'action.yml,package.json,package-lock.json'
 
       # The directories that contain source code for the action.  Only dirs with files that affect the action's
       # execution should be included like src or dist.  Do not include dirs like .github or node_modules.
       # The format of this input is a comma-separated string.
       # ** This value must match the same dirs-with-code argument specified in increment-version-on-merge.yml.
-      dirs-with-code: 'src,dist' # TODO:  Update if there are additional directories with code for the action.
+      dirs-with-code: 'src,dist,catalogInfoSchema'
 
       # The npm script to run to build the action.  This is typically 'npm run build' if the
       # action needs to be compiled.  For composite-run-steps actions this is typically empty.
-      build-command: 'npm run build' # TODO:  Update if a different command is used to build/recompile/format the action
+      build-command: 'npm run build'
 
-  test:
+  test-file-problems:
     runs-on: ubuntu-latest
+
     steps:
-      #--------------------------------------
-      # Setup
-      #--------------------------------------
-      - uses: actions/checkout@v3
-      # TODO:  add any additional steps needed to setup the test scenarios
-
-      # TODO:  Replace with the scenarios needed to test this action
-
-      #--------------------------------------
-      # SCENARIO 1
-      #--------------------------------------
-      - name: '-------------------------------------------------------------------------------------------------------'
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
         run: echo ""
 
-      - name: When the repo is 'im-open/javascript-action-template'
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                        TEST 1 - FILENAME THAT DOES NOT EXIST AND FAIL-IF-ERRORS=TRUE                        '
+        run: echo ""
+
+      - name: 1 - When validate-catalog-info-file is called with a filename that does not exist and fail-if-errors=true
+        id: file-does-not-exist-fail
         if: always()
-        id: repo-check
+        continue-on-error: true # This is needed because we expect the step to fail but we need it to "pass" in order for the test job to succeed.
+        uses: ./
+        with:
+          # filename: ./catalog-info.yml  # This is the default value but it doesn't exist in this repo
+          fail-if-errors: true
+          generate-job-summary: false
+
+      - name: 1 - Then the action outcome should be failure
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "failure" --actual "${{ steps.file-does-not-exist-fail.outcome }}"
+      
+      - name: 1 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.file-does-not-exist-fail.outputs.is-valid }}"
+      
+      - name: 1 - And the 'errors-markdown' output should match the contents of '${{ env.MISSING_MD_FILE }}'
+        if: always()
         run: |
-          if [ "${{ github.repository }}" != "im-open/javascript-action-template" ]; then
-            exit 1
-          else
-            echo "SUCCESS=true" >> "$GITHUB_OUTPUT"
-          fi
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.MISSING_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.file-does-not-exist-fail.outputs.errors-markdown }}'
+      
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                        TEST 2 - FILENAME THAT DOES NOT EXIST AND FAIL-IF-ERRORS=FALSE                       '
+        run: echo ""
 
-      - name: Then the outcome should be success
+      - name: 2 - When validate-catalog-info-file is called with a filename that does not exist but fail-if-errors=false
+        id: file-does-not-exist-pass
         if: always()
-        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.repo-check.outcome }}"
+        uses: ./
+        with:
+          filename: ./catalog-info.yml
+          fail-if-errors: false
+          generate-job-summary: false
 
-      - name: And the SUCCESS output should be true
+      - name: 2 - Then the action outcome should be success because fail-if-errors is false
         if: always()
-        run: ./test/assert-values-match.sh --name "SUCCESS output" --expected "true" --actual "${{ steps.repo-check.outputs.SUCCESS }}"
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.file-does-not-exist-pass.outcome }}"
+      
+      - name: 2 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.file-does-not-exist-pass.outputs.is-valid }}"
+      
+      - name: 2 - And the 'errors-markdown' output should match the contents of '${{ env.MISSING_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.MISSING_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.file-does-not-exist-pass.outputs.errors-markdown }}'
+      
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                           TEST 3 - FILE IS EMPTY                                            '
+        run: echo ""
+
+      - name: 3 - When validate-catalog-info-file is called with a file that exists but is empty
+        id: empty-file
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/empty.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 3 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.empty-file.outcome }}"
+      
+      - name: 3 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.empty-file.outputs.is-valid }}"
+      
+      - name: 3 - And the 'errors-markdown' output should match the contents of '${{ env.EMPTY_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.EMPTY_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.empty-file.outputs.errors-markdown }}'
+
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                       TEST 4 - FILE IS JUST COMMENTS                                        '
+        run: echo ""
+
+      - name: 4 - When validate-catalog-info-file is called with a file that exists but it only contains comments
+        id: comments-only
+        if: always()
+        continue-on-error: true # This is needed because we expect the step to fail but we need it to "pass" in order for the test job to succeed.
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/comments-only.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 4 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.comments-only.outcome }}"
+      
+      - name: 4 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.comments-only.outputs.is-valid }}"
+      
+      - name: 4 - And the 'errors-markdown' output should match the contents of '${{ env.COMMENTS_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.COMMENTS_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.comments-only.outputs.errors-markdown }}'
+
+  test-valid-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                          TEST 5 - VALID ENTITIES                                           '
+        run: echo ""
+
+      - name: 5 - When validate-catalog-info-file is called with a file that has all valid entities
+        id: valid-entities
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/valid-entities.yml
+          fail-if-errors: true
+          generate-job-summary: false
+
+      - name: 5 - Then the action outcome should be success because all entities are valid
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.valid-entities.outcome }}"
+      
+      - name: 5 - And the 'is-valid' output should be true
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "true" --actual "${{ steps.valid-entities.outputs.is-valid }}"
+      
+      - name: 5 - And the 'errors-markdown' output should be empty
+        if: always()
+        run: ./test/assert-values-match.sh --name "errors-markdown output" --expected "" --actual "${{ steps.valid-entities.outputs.errors-markdown }}"
+      
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                        TEST 6 - VALID SINGLE ENTITY                                        '
+        run: echo ""
+
+      - name: 6 - When validate-catalog-info-file is called with a file with one valid entity
+        id: valid-entity
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/valid-entity.yml
+          fail-if-errors: true
+          generate-job-summary: false
+
+      - name: 6 - Then the action outcome should be success because all entities are valid
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.valid-entity.outcome }}"
+      
+      - name: 6 - And the 'is-valid' output should be true
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "true" --actual "${{ steps.valid-entity.outputs.is-valid }}"
+      
+      - name: 6 - And the 'errors-markdown' output should be empty
+        if: always()
+        run: ./test/assert-values-match.sh --name "errors-markdown output" --expected "" --actual "${{ steps.valid-entity.outputs.errors-markdown }}"
+
+  test-entities:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+      
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                          TEST 7 - INVALID ENTITIES                                          '
+        run: echo ""
+
+      - name: 7 - When validate-catalog-info-file is called with a file that has invalid entities
+        id: invalid-entities
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/invalid-entities.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 7 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.invalid-entities.outcome }}"
+      
+      - name: 7 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.invalid-entities.outputs.is-valid }}"
+      
+      - name: 7 - And the 'errors-markdown' output should match the contents of '${{ env.ENTITIES_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          # - The provided filename was captured correctly
+          # - The expected validation errors are present
+          
+          expectedMdFile="${{ env.ENTITIES_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.invalid-entities.outputs.errors-markdown }}'
+
+  test-systems:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                           TEST 8 - INVALID SYSTEMS                                          '
+        run: echo ""
+
+      - name: 8 - When validate-catalog-info-file is called with a file that has invalid systems
+        id: invalid-systems
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/invalid-systems.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 8 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.invalid-systems.outcome }}"
+      
+      - name: 8 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.invalid-systems.outputs.is-valid }}"
+      
+      - name: 8 - And the 'errors-markdown' output should match the contents of '${{ env.SYSTEMS_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.SYSTEMS_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.invalid-systems.outputs.errors-markdown }}'
+
+  test-domains:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                           TEST 9 - INVALID DOMAINS                                          '
+        run: echo ""
+
+      - name: 9 - When validate-catalog-info-file is called with a file that has invalid domains
+        id: invalid-domains
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/invalid-domains.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 9 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.invalid-domains.outcome }}"
+      
+      - name: 9 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.invalid-domains.outputs.is-valid }}"
+      
+      - name: 9 - And the 'errors-markdown' output should match the contents of '${{ env.DOMAINS_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.DOMAINS_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.invalid-domains.outputs.errors-markdown }}'
+
+  test-resources:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                          TEST 10 - INVALID RESOURCES                                         '
+        run: echo ""
+
+      - name: 10 - When validate-catalog-info-file is called with a file that has invalid resources
+        id: invalid-resources
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/invalid-resources.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 10 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.invalid-resources.outcome }}"
+      
+      - name: 10 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.invalid-resources.outputs.is-valid }}"
+      
+      - name: 10 - And the 'errors-markdown' output should match the contents of '${{ env.RESOURCES_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.RESOURCES_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.invalid-resources.outputs.errors-markdown }}'
+      
+  test-apis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                             TEST 11 - INVALID APIS                                           '
+        run: echo ""
+
+      - name: 11 - When validate-catalog-info-file is called with a file that has invalid apis
+        id: invalid-apis
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/invalid-apis.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 11 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.invalid-apis.outcome }}"
+      
+      - name: 11 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.invalid-apis.outputs.is-valid }}"
+      
+      - name: 11 - And the 'errors-markdown' output should match the contents of '${{ env.APIS_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.APIS_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.invalid-apis.outputs.errors-markdown }}'
+
+  test-components:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                                    SETUP                                                    '
+        run: echo ""
+
+      - name: Setup - Checkout the action
+        uses: actions/checkout@v4
+
+      - name: '-------------------------------------------------------------------------------------------------------------'
+        run: echo ""
+      - name: '                                        TEST 12 - INVALID COMPONENTS                                         '
+        run: echo ""
+
+      - name: 12 - When validate-catalog-info-file is called with a file that has invalid components
+        id: invalid-components
+        if: always()
+        uses: ./
+        with:
+          filename: ./test/catalog-infos/invalid-components.yml
+          fail-if-errors: false
+          generate-job-summary: false
+
+      - name: 12 - Then the action outcome should be success because fail-if-errors is false
+        if: always()
+        run: ./test/assert-values-match.sh --name "step outcome" --expected "success" --actual "${{ steps.invalid-components.outcome }}"
+      
+      - name: 12 - And the 'is-valid' output should be false
+        if: always()
+        run: ./test/assert-values-match.sh --name "is-valid output" --expected "false" --actual "${{ steps.invalid-components.outputs.is-valid }}"
+      
+      - name: 12 - And the 'errors-markdown' output should match the contents of '${{ env.COMPONENTS_MD_FILE }}'
+        if: always()
+        run: |
+          # Comparing the errors-markdown will ensure that:
+          #  - The provided filename was captured correctly
+          #  - The expected validation errors are present
+          
+          expectedMdFile="${{ env.COMPONENTS_MD_FILE }}"
+          ./test/assert-markdown-matches.sh --expectedMdFile $expectedMdFile --actualMarkdown '${{ steps.invalid-components.outputs.errors-markdown }}'
+      
