@@ -1,4 +1,4 @@
-name: 'validate-catalog-info-file'
+name: 'validate-catalog-info'
 
 description: 'Action that validates the contents of a catalog-info.yml file.'
 

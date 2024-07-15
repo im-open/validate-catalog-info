@@ -29630,8 +29630,8 @@ var require_validate2 = __commonJS({
     var resourceSchema = require_Resource_v1alpha1_schema();
     var systemSchema = require_System_v1alpha1_schema();
     var entitySchema = require_Entity_schema();
-    var SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/schema/CatalogInfo.schema.json';
-    var API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/schema/API.v1alpha1.schema.json';
+    var SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/CatalogInfo.schema.json';
+    var API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/API.v1alpha1.schema.json';
     function setupAjvSchemaValidation2(Ajv2) {
       const ajv = new Ajv2({
         allErrors: true,

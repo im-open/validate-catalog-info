@@ -1,4 +1,4 @@
-# validate-catalog-info-file
+# validate-catalog-info
 
 This action validates the contents of a `catalog-info.yml` file.  This action can be used during CI or other workflows to ensure the ongoing validity of the file.  
 
@@ -13,7 +13,7 @@ To address the limitation with the number of annotations, an `errors-markdown` o
 
 ## Index <!-- omit in toc -->
 
-- [validate-catalog-info-file](#validate-catalog-info-file)
+- [validate-catalog-info](#validate-catalog-info)
   - [Inputs](#inputs)
   - [Outputs](#outputs)
   - [Usage Examples](#usage-examples)
@@ -54,7 +54,7 @@ jobs:
 
       - name: Validate catalog-info.yml
         id: catalogInfo
-        uses: im-open/validate-catalog-info-file@v1.0.0
+        uses: im-open/validate-catalog-info@v1.0.0
         with:
           filename: ./docs/catalog-info.yml # Defaults to ./catalog-info.yml
           fail-if-errors: false             # Defaults to true

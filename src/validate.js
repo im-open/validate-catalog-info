@@ -6,8 +6,8 @@ const resourceSchema = require('../schema/Resource.v1alpha1.schema.json');
 const systemSchema = require('../schema/System.v1alpha1.schema.json');
 const entitySchema = require('../schema/Entity.schema.json');
 
-const SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/schema/CatalogInfo.schema.json';
-const API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/schema/API.v1alpha1.schema.json';
+const SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/CatalogInfo.schema.json';
+const API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/API.v1alpha1.schema.json';
 
 function setupAjvSchemaValidation(Ajv) {
   // If allErrors is not set, the validator will stop once the first validation error occurrs

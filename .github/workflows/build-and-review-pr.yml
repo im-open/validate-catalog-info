@@ -91,7 +91,7 @@ jobs:
       - name: '                        TEST 1 - FILENAME THAT DOES NOT EXIST AND FAIL-IF-ERRORS=TRUE                        '
         run: echo ""
 
-      - name: 1 - When validate-catalog-info-file is called with a filename that does not exist and fail-if-errors=true
+      - name: 1 - When validate-catalog-info is called with a filename that does not exist and fail-if-errors=true
         id: file-does-not-exist-fail
         if: always()
         continue-on-error: true # This is needed because we expect the step to fail but we need it to "pass" in order for the test job to succeed.
@@ -125,7 +125,7 @@ jobs:
       - name: '                        TEST 2 - FILENAME THAT DOES NOT EXIST AND FAIL-IF-ERRORS=FALSE                       '
         run: echo ""
 
-      - name: 2 - When validate-catalog-info-file is called with a filename that does not exist but fail-if-errors=false
+      - name: 2 - When validate-catalog-info is called with a filename that does not exist but fail-if-errors=false
         id: file-does-not-exist-pass
         if: always()
         uses: ./
@@ -158,7 +158,7 @@ jobs:
       - name: '                                           TEST 3 - FILE IS EMPTY                                            '
         run: echo ""
 
-      - name: 3 - When validate-catalog-info-file is called with a file that exists but is empty
+      - name: 3 - When validate-catalog-info is called with a file that exists but is empty
         id: empty-file
         if: always()
         uses: ./
@@ -191,7 +191,7 @@ jobs:
       - name: '                                       TEST 4 - FILE IS JUST COMMENTS                                        '
         run: echo ""
 
-      - name: 4 - When validate-catalog-info-file is called with a file that exists but it only contains comments
+      - name: 4 - When validate-catalog-info is called with a file that exists but it only contains comments
         id: comments-only
         if: always()
         continue-on-error: true # This is needed because we expect the step to fail but we need it to "pass" in order for the test job to succeed.
@@ -236,7 +236,7 @@ jobs:
       - name: '                                          TEST 5 - VALID ENTITIES                                           '
         run: echo ""
 
-      - name: 5 - When validate-catalog-info-file is called with a file that has all valid entities
+      - name: 5 - When validate-catalog-info is called with a file that has all valid entities
         id: valid-entities
         if: always()
         uses: ./
@@ -263,7 +263,7 @@ jobs:
       - name: '                                        TEST 6 - VALID SINGLE ENTITY                                        '
         run: echo ""
 
-      - name: 6 - When validate-catalog-info-file is called with a file with one valid entity
+      - name: 6 - When validate-catalog-info is called with a file with one valid entity
         id: valid-entity
         if: always()
         uses: ./
@@ -301,7 +301,7 @@ jobs:
       - name: '                                          TEST 7 - INVALID ENTITIES                                          '
         run: echo ""
 
-      - name: 7 - When validate-catalog-info-file is called with a file that has invalid entities
+      - name: 7 - When validate-catalog-info is called with a file that has invalid entities
         id: invalid-entities
         if: always()
         uses: ./
@@ -345,7 +345,7 @@ jobs:
       - name: '                                           TEST 8 - INVALID SYSTEMS                                          '
         run: echo ""
 
-      - name: 8 - When validate-catalog-info-file is called with a file that has invalid systems
+      - name: 8 - When validate-catalog-info is called with a file that has invalid systems
         id: invalid-systems
         if: always()
         uses: ./
@@ -389,7 +389,7 @@ jobs:
       - name: '                                           TEST 9 - INVALID DOMAINS                                          '
         run: echo ""
 
-      - name: 9 - When validate-catalog-info-file is called with a file that has invalid domains
+      - name: 9 - When validate-catalog-info is called with a file that has invalid domains
         id: invalid-domains
         if: always()
         uses: ./
@@ -433,7 +433,7 @@ jobs:
       - name: '                                          TEST 10 - INVALID RESOURCES                                         '
         run: echo ""
 
-      - name: 10 - When validate-catalog-info-file is called with a file that has invalid resources
+      - name: 10 - When validate-catalog-info is called with a file that has invalid resources
         id: invalid-resources
         if: always()
         uses: ./
@@ -477,7 +477,7 @@ jobs:
       - name: '                                             TEST 11 - INVALID APIS                                           '
         run: echo ""
 
-      - name: 11 - When validate-catalog-info-file is called with a file that has invalid apis
+      - name: 11 - When validate-catalog-info is called with a file that has invalid apis
         id: invalid-apis
         if: always()
         uses: ./
@@ -521,7 +521,7 @@ jobs:
       - name: '                                        TEST 12 - INVALID COMPONENTS                                         '
         run: echo ""
 
-      - name: 12 - When validate-catalog-info-file is called with a file that has invalid components
+      - name: 12 - When validate-catalog-info is called with a file that has invalid components
         id: invalid-components
         if: always()
         uses: ./

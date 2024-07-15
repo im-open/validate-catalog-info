@@ -2,7 +2,7 @@
 
 These json schemas represent the format of our `catalog-info.yml` files.  The schema is very similar to Backstage's implementation but more strict when it comes to entity references.  In IM's schema, any entity reference requires the `kind` part to be included.  Backstage does not require the `kind` part in all cases.
 
-These schema files are used both to validate `catalog-info.yml` files in the `validate-catalog-info-file` action and in IDEs that support associating a schema with file types for validation.
+These schema files are used both to validate `catalog-info.yml` files in the `validate-catalog-info` action and in IDEs that support associating a schema with file types for validation.
 
 ## Index <!-- omit in toc -->
 
