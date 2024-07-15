@@ -1,13 +1,13 @@
-const catalogInfoSchema = require('../catalogInfoSchema/CatalogInfo.schema.json');
-const apiSchema = require('../catalogInfoSchema/API.v1alpha1.schema.json');
-const componentSchema = require('../catalogInfoSchema/Component.v1alpha1.schema.json');
-const domainSchema = require('../catalogInfoSchema/Domain.v1alpha1.schema.json');
-const resourceSchema = require('../catalogInfoSchema/Resource.v1alpha1.schema.json');
-const systemSchema = require('../catalogInfoSchema/System.v1alpha1.schema.json');
-const entitySchema = require('../catalogInfoSchema/Entity.schema.json');
+const catalogInfoSchema = require('../schema/CatalogInfo.schema.json');
+const apiSchema = require('../schema/API.v1alpha1.schema.json');
+const componentSchema = require('../schema/Component.v1alpha1.schema.json');
+const domainSchema = require('../schema/Domain.v1alpha1.schema.json');
+const resourceSchema = require('../schema/Resource.v1alpha1.schema.json');
+const systemSchema = require('../schema/System.v1alpha1.schema.json');
+const entitySchema = require('../schema/Entity.schema.json');
 
-const SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/catalogInfoSchema/CatalogInfo.schema.json';
-const API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info-file/blob/main/catalogInfoSchema/API.v1alpha1.schema.json';
+const SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/CatalogInfo.schema.json';
+const API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/API.v1alpha1.schema.json';
 
 function setupAjvSchemaValidation(Ajv) {
   // If allErrors is not set, the validator will stop once the first validation error occurrs
@@ -28,6 +28,7 @@ function setupAjvSchemaValidation(Ajv) {
 
   // Schema compilation happens on the first API call, not when they are added.  So make a
   // call here to force it to compile, so when we go to validate it doesn't need to do it.
+  // The first call can be "slow" so fire it off now, rather than when we need it to be fast.
   ajv.getSchema('root');
 
   return ajv;
