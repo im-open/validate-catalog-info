@@ -8,16 +8,13 @@
       "apiVersion": "backstage.io/v1alpha1",
       "kind": "Component",
       "metadata": {
-        "name": "LoremService",
-        "description": "Creates Lorems like a pro.",
-        "annotations": {
-          "docs": "https://github.com/..../tree/develop/doc"
-        }
+        "name": "appointment-manager-mfe",
+        "description": "Front end for setting up appointments"
       },
       "spec": {
-        "type": "service",
-        "lifecycle": "production",
-        "owner": "tools"
+        "type": "mfe",
+        "lifecycle": "maintaining",
+        "owner": "group:default/ce2"
       }
     }
   ],
@@ -29,9 +26,6 @@
       "type": "object",
       "required": ["spec"],
       "properties": {
-        "apiVersion": {
-          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
-        },
         "kind": {
           "enum": ["Component"]
         },
@@ -45,7 +39,6 @@
               "minItems": 1,
               "items": {
                   "type": "string",
-                  "minLength": 1,
                   "examples": [
                       "Dev",
                       "QA",
@@ -55,7 +48,8 @@
                   ]
               }
             }
-          }
+          },
+          "$comment": "It may contain an optional deployment-environments property."
         },
         "spec": {
           "type": "object",
@@ -64,39 +58,56 @@
             "type": {
               "type": "string",
               "description": "The lifecycle state of the component. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/component/#property-value-restrictions",
-              "examples": ["service", "library", "documentation", "tool", "mfe", "site"],
-              "enum": ["service", "library", "documentation", "tool", "mfe", "site"],
-              "minLength": 1
+              "enum": ["service", "library", "documentation", "tool", "mfe", "site"]
             },
             "lifecycle": {
               "type": "string",
               "description": "The lifecycle state of the component. More info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/component/#property-value-restrictions",
-              "examples": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"],
-              "enum": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"],
-              "minLength": 1
+              "enum": ["experimenting", "developing", "maintaining", "deprecating", "obsolete"]
             },
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the Component.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "examples": ["artist-relations-team", "user:john.johnson"],
-              "minLength": 1
+              "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+              "examples": [
+                "group:default/customization",
+                "group:customization",
+                "user:RyanHauert",
+                "user:default/RyanHauert"
+              ]
             },
             "system": {
               "type": "string",
               "description": "An entity reference to the system that the component belongs to.",
-              "minLength": 1
+              "pattern": "\\b(?:system)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: 'system:[<optional-namespace>/]<system-name>'",
+              "examples": [
+                "system:default/appointment-manager",
+                "system:appointment-manager"
+              ]
             },
             "subcomponentOf": {
               "type": "string",
               "description": "An entity reference to another component of which the component is a part.",
-              "minLength": 1
+              "pattern": "\\b(?:component)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: 'component:[<optional-namespace>/]<component-name>'",
+              "examples": [
+                "component:default/discover-mfe",
+                "component:discover-mfe"
+              ]
             },
             "providesApis": {
               "type": "array",
               "description": "An array of entity references to the APIs that are provided by the component.",
               "items": {
                 "type": "string",
-                "minLength": 1
+                "pattern": "\\b(?:api)\\b:(?:\\bdefault\\/\\b)?.+",
+                "$comment": "Expected Pattern: 'api:[<optional-namespace>/]<api-name>'",
+                "examples": [
+                  "api:default/appointment-manager-service",
+                  "api:appointment-manager-service"
+                ]
               }
             },
             "consumesApis": {
@@ -104,18 +115,29 @@
               "description": "An array of entity references to the APIs that are consumed by the component.",
               "items": {
                 "type": "string",
-                "minLength": 1
+                "pattern": "\\b(?:api)\\b:(?:\\bdefault\\/\\b)?.+",
+                "$comment": "Expected Pattern: 'api:[<optional-namespace>/]<api-name>'",
+                "examples": [
+                  "api:default/appointment-manager-service",
+                  "api:appointment-manager-service"
+                ]
               }
             },
             "dependsOn": {
               "type": "array",
-              "description": "An array of references to other entities that the component depends on to function.",
+              "description": "An array of entity references that the component depends on to function.",
               "items": {
                 "type": "string",
-                "minLength": 1
+                "pattern": "\\b(?:api|component|domain|resource|system)\\b:(?:\\bdefault\\/\\b)?.+",
+                "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+                "examples": [
+                  "resource:default/launchdarkly",
+                  "component:front-end-tooling-mfe"
+                ]
               }
             }
-          }
+          },
+          "$comment": "It should contain lifecycle, system, and type properties and may contain optional owner, subcomponentOf, providesApis, consumesApis and dependsOn props."
         }
       }
     }

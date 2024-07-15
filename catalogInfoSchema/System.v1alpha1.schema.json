@@ -8,12 +8,8 @@
       "apiVersion": "backstage.io/v1alpha1",
       "kind": "System",
       "metadata": {
-        "name": "artist-engagement-portal",
-        "description": "Handy tools to keep artists in the loop"
-      },
-      "spec": {
-        "owner": "artist-relations-team",
-        "domain": "artists"
+        "name": "appointment-manager",
+        "title": "Appointment Manager"
       }
     }
   ],
@@ -24,9 +20,6 @@
     {
       "type": "object",
       "properties": {
-        "apiVersion": {
-          "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
-        },
         "kind": {
           "enum": ["System"]
         },
@@ -36,16 +29,27 @@
             "owner": {
               "type": "string",
               "description": "An entity reference to the owner of the System.\nThis should usually not be specified because the owner will be automatically determined via this repository's CODEOWNERS file.",
-              "examples": ["artist-relations-team", "user:john.johnson"],
-              "minLength": 1
+              "pattern": "\\b(?:group|user)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: '<kind>:[<optional-namespace>/]<entity-name>'",
+              "examples": [
+                "group:default/customization",
+                "group:customization",
+                "user:RyanHauert",
+                "user:default/RyanHauert"
+              ]
             },
             "domain": {
               "type": "string",
               "description": "An entity reference to the domain that the system belongs to.",
-              "examples": ["artists"],
-              "minLength": 1
+              "pattern": "\\b(?:domain)\\b:(?:\\bdefault\\/\\b)?.+",
+              "$comment": "Expected Pattern: 'domain:[<optional-namespace>/]<domain-name>'",
+              "examples": [
+                "domain:default/front-end-tooling",
+                "domain:content-management"
+              ]
             }
-          }
+          },
+          "$comment": "It should contain at least one optional domain or owner property or be removed completely."
         }
       }
     }
