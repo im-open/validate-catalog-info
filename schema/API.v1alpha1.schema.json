@@ -63,7 +63,7 @@
                     },
                     "envs": {
                       "type": "string",
-                      "description": "The environments where the entity is available.",
+                      "description": "A space-separated list of environments where the entity is available.",
                       "minLength": 1
                     }
                   },
