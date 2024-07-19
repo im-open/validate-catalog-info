@@ -32,62 +32,17 @@
             {
               "subdomain": "my",
               "path": "/shopping",
-              "envs": "dev"
-            },
-            {
-              "subdomain": "my",
-              "path": "/shopping",
-              "envs": "qa"
-            },
-            {
-              "subdomain": "my",
-              "path": "/shopping",
-              "envs": "stage"
-            },
-            {
-              "subdomain": "my",
-              "path": "/shopping",
-              "envs": "prod"
+              "envs": "dev qa stage prod"
             },
             {
               "subdomain": "marketplace",
               "path": "/shopping",
-              "envs": "dev"
-            },
-            {
-              "subdomain": "marketplace",
-              "path": "/shopping",
-              "envs": "qa"
-            },
-            {
-              "subdomain": "marketplace",
-              "path": "/shopping",
-              "envs": "stage"
-            },
-            {
-              "subdomain": "marketplace",
-              "path": "/shopping",
-              "envs": "prod"
+              "envs": "dev qa stage prod"
             },
             {
               "subdomain": "app",
               "path": "/shopping",
-              "envs": "dev"
-            },
-            {
-              "subdomain": "app",
-              "path": "/shopping",
-              "envs": "qa"
-            },
-            {
-              "subdomain": "app",
-              "path": "/shopping",
-              "envs": "stage"
-            },
-            {
-              "subdomain": "app",
-              "path": "/shopping",
-              "envs": "prod"
+              "envs": "dev qa stage prod"
             }
           ]
         }
