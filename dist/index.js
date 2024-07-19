@@ -29029,7 +29029,16 @@ var require_API_v1alpha1_schema = __commonJS({
           kind: 'API',
           metadata: {
             name: 'appointment-manager-service',
-            description: 'Sets up appointments'
+            description: 'Sets up appointments',
+            addresses: {
+              'mktp.io': [
+                {
+                  subdomain: 'techhub',
+                  path: '/',
+                  envs: 'uat prod'
+                }
+              ]
+            }
           },
           spec: {
             type: 'openapi',
@@ -29050,6 +29059,57 @@ var require_API_v1alpha1_schema = __commonJS({
           properties: {
             kind: {
               enum: ['API']
+            },
+            metadata: {
+              type: 'object',
+              properties: {
+                addresses: {
+                  type: 'object',
+                  description:
+                    'The addresses where the API can be accessed. Each property name of this object is the domain of the address, and the value of the property contains the remainder of the address information.',
+                  additionalProperties: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        subdomain: {
+                          type: 'string',
+                          description: 'The subdomain of the address.',
+                          minLength: 1
+                        },
+                        path: {
+                          type: 'string',
+                          description: 'The path of the address.',
+                          minLength: 1
+                        },
+                        envs: {
+                          type: 'string',
+                          description: 'A space-separated list of environments where the entity is available.',
+                          minLength: 1
+                        }
+                      },
+                      examples: [
+                        {
+                          subdomain: 'api',
+                          path: '/household',
+                          envs: 'dev qa stage prod'
+                        }
+                      ]
+                    }
+                  },
+                  examples: [
+                    {
+                      'mktp.io': [
+                        {
+                          subdomain: 'techhub',
+                          path: '/',
+                          envs: 'uat prod'
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
             },
             spec: {
               type: 'object',
@@ -29158,6 +29218,42 @@ var require_Component_v1alpha1_schema = __commonJS({
             lifecycle: 'maintaining',
             owner: 'group:default/ce2'
           }
+        },
+        {
+          apiVersion: 'backstage.io/v1alpha1',
+          kind: 'Component',
+          metadata: {
+            name: 'shopping-mfe',
+            title: 'Shopping MFE',
+            description: 'Front end for letting users shop for plans.',
+            annotations: {
+              'sumo.mktp.io/source-category': 'Shopping/MFE/<env>'
+            },
+            addresses: {
+              'viabenefits.com': [
+                {
+                  subdomain: 'my',
+                  path: '/shopping',
+                  envs: 'dev qa stage prod'
+                },
+                {
+                  subdomain: 'marketplace',
+                  path: '/shopping',
+                  envs: 'dev qa stage prod'
+                },
+                {
+                  subdomain: 'app',
+                  path: '/shopping',
+                  envs: 'dev qa stage prod'
+                }
+              ]
+            }
+          },
+          spec: {
+            type: 'mfe',
+            lifecycle: 'maintaining',
+            system: 'system:shopping'
+          }
         }
       ],
       allOf: [
@@ -29184,6 +29280,52 @@ var require_Component_v1alpha1_schema = __commonJS({
                     type: 'string',
                     examples: ['Dev', 'QA', 'Stage', 'Prod', 'UAT']
                   }
+                },
+                addresses: {
+                  type: 'object',
+                  description:
+                    'The addresses where the API can be accessed. Each property name of this object is the domain of the address, and the value of the property contains the remainder of the address information.',
+                  additionalProperties: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        subdomain: {
+                          type: 'string',
+                          description: 'The subdomain of the address.',
+                          minLength: 1
+                        },
+                        path: {
+                          type: 'string',
+                          description: 'The path of the address.',
+                          minLength: 1
+                        },
+                        envs: {
+                          type: 'string',
+                          description: 'A space-separated list of environments where the entity is available.',
+                          minLength: 1
+                        }
+                      },
+                      examples: [
+                        {
+                          subdomain: 'marketplace',
+                          path: '/home',
+                          envs: 'dev qa stage prod'
+                        }
+                      ]
+                    }
+                  },
+                  examples: [
+                    {
+                      'viabenefits.com': [
+                        {
+                          subdomain: 'my',
+                          path: '/home',
+                          envs: 'dev qa stage prod'
+                        }
+                      ]
+                    }
+                  ]
                 }
               },
               $comment: 'It may contain an optional deployment-environments property.'
