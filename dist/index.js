@@ -29071,6 +29071,7 @@ var require_API_v1alpha1_schema = __commonJS({
                     type: 'array',
                     items: {
                       type: 'object',
+                      required: ['subdomain', 'path', 'envs'],
                       properties: {
                         subdomain: {
                           type: 'string',
@@ -29084,17 +29085,19 @@ var require_API_v1alpha1_schema = __commonJS({
                         },
                         envs: {
                           type: 'string',
-                          description: 'A space-separated list of environments where the entity is available.',
+                          description: 'A space-separated list of environments where the API is available.',
                           minLength: 1
                         }
                       },
                       examples: [
                         {
-                          subdomain: 'api',
-                          path: '/household',
-                          envs: 'dev qa stage prod'
+                          subdomain: 'techhub',
+                          path: '/',
+                          envs: 'uat prod'
                         }
-                      ]
+                      ],
+                      $comment:
+                        'Addresses is optional but cannot be empty.  If present, it should contain a list of address items.  Each address item has a required subdomain, path and envs property.'
                     }
                   },
                   examples: [
@@ -29107,9 +29110,12 @@ var require_API_v1alpha1_schema = __commonJS({
                         }
                       ]
                     }
-                  ]
+                  ],
+                  $comment:
+                    'The object should be populated with one or more domains as the property name and a list of populated address objects as the value for each domain.'
                 }
-              }
+              },
+              $comment: 'It may contain an optional addresses property.'
             },
             spec: {
               type: 'object',
@@ -29211,39 +29217,17 @@ var require_Component_v1alpha1_schema = __commonJS({
           kind: 'Component',
           metadata: {
             name: 'appointment-manager-mfe',
-            description: 'Front end for setting up appointments'
-          },
-          spec: {
-            type: 'mfe',
-            lifecycle: 'maintaining',
-            owner: 'group:default/ce2'
-          }
-        },
-        {
-          apiVersion: 'backstage.io/v1alpha1',
-          kind: 'Component',
-          metadata: {
-            name: 'shopping-mfe',
-            title: 'Shopping MFE',
-            description: 'Front end for letting users shop for plans.',
-            annotations: {
-              'sumo.mktp.io/source-category': 'Shopping/MFE/<env>'
-            },
+            description: 'Front end for setting up appointments',
             addresses: {
-              'viabenefits.com': [
+              'mktp.io': [
                 {
-                  subdomain: 'my',
-                  path: '/shopping',
+                  subdomain: 'api',
+                  path: '/telappts',
                   envs: 'dev qa stage prod'
                 },
                 {
-                  subdomain: 'marketplace',
-                  path: '/shopping',
-                  envs: 'dev qa stage prod'
-                },
-                {
-                  subdomain: 'app',
-                  path: '/shopping',
+                  subdomain: 'telappts',
+                  path: '/tel-appointments',
                   envs: 'dev qa stage prod'
                 }
               ]
@@ -29252,7 +29236,7 @@ var require_Component_v1alpha1_schema = __commonJS({
           spec: {
             type: 'mfe',
             lifecycle: 'maintaining',
-            system: 'system:shopping'
+            owner: 'group:default/ce2'
           }
         }
       ],
@@ -29284,11 +29268,12 @@ var require_Component_v1alpha1_schema = __commonJS({
                 addresses: {
                   type: 'object',
                   description:
-                    'The addresses where the API can be accessed. Each property name of this object is the domain of the address, and the value of the property contains the remainder of the address information.',
+                    'The addresses where the Component can be accessed. Each property name of this object is the domain of the address, and the value of the property contains the remainder of the address information.',
                   additionalProperties: {
                     type: 'array',
                     items: {
                       type: 'object',
+                      required: ['subdomain', 'path', 'envs'],
                       properties: {
                         subdomain: {
                           type: 'string',
@@ -29302,33 +29287,37 @@ var require_Component_v1alpha1_schema = __commonJS({
                         },
                         envs: {
                           type: 'string',
-                          description: 'A space-separated list of environments where the entity is available.',
+                          description: 'A space-separated list of environments where the Component is available.',
                           minLength: 1
                         }
                       },
                       examples: [
                         {
-                          subdomain: 'marketplace',
-                          path: '/home',
+                          subdomain: 'api',
+                          path: '/telappts',
                           envs: 'dev qa stage prod'
                         }
-                      ]
+                      ],
+                      $comment:
+                        'Addresses is optional but cannot be empty.  If present, it should contain a list of address items.  Each address item has a required subdomain, path and envs property.'
                     }
                   },
                   examples: [
                     {
-                      'viabenefits.com': [
+                      'mktp.io': [
                         {
-                          subdomain: 'my',
-                          path: '/home',
+                          subdomain: 'api',
+                          path: '/telappts',
                           envs: 'dev qa stage prod'
                         }
                       ]
                     }
-                  ]
+                  ],
+                  $comment:
+                    'The object should be populated with one or more domains as the property name and a list of populated address objects as the value for each domain.'
                 }
               },
-              $comment: 'It may contain an optional deployment-environments property.'
+              $comment: 'It may contain an optional deployment-environments or addresses property.'
             },
             spec: {
               type: 'object',

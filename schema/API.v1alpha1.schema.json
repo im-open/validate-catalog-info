@@ -50,6 +50,11 @@
                 "type": "array",
                 "items": {
                   "type": "object",
+                  "required": [
+                    "subdomain",
+                    "path",
+                    "envs"
+                  ],
                   "properties": {
                     "subdomain": {
                       "type": "string",
@@ -63,17 +68,18 @@
                     },
                     "envs": {
                       "type": "string",
-                      "description": "A space-separated list of environments where the entity is available.",
+                      "description": "A space-separated list of environments where the API is available.",
                       "minLength": 1
                     }
                   },
                   "examples": [
                     {
-                      "subdomain": "api",
-                      "path": "/household",
-                      "envs": "dev qa stage prod"
+                      "subdomain": "techhub",
+                      "path": "/",
+                      "envs": "uat prod"
                     }
-                  ]
+                  ],
+                  "$comment": "Addresses is optional but cannot be empty.  If present, it should contain a list of address items.  Each address item has a required subdomain, path and envs property."
                 }
               },
               "examples": [
@@ -86,9 +92,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "$comment": "The object should be populated with one or more domains as the property name and a list of populated address objects as the value for each domain."
             }
-          }
+          },
+          "$comment": "It may contain an optional addresses property."
         },
         "spec": {
           "type": "object",
