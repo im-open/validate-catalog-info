@@ -29413,7 +29413,15 @@ var require_Domain_v1alpha1_schema = __commonJS({
           kind: 'Domain',
           metadata: {
             name: 'front-end-tooling',
-            description: 'Tools and components to unify and streamline front-end development, browser performance, and consistency.'
+            description: 'Tools and components to unify and streamline front-end development, browser performance, and consistency.',
+            needs: {
+              'print-vendor': 'to send printed materials',
+              telephony: 'to notify when there are calls in the queue'
+            },
+            annotations: {
+              'mktp.io/notes': 'Tools and components to unify and streamline front-end development.',
+              'mktp.io/owners': 'Any additional info about ownership'
+            }
           },
           spec: {
             owner: 'group:default/customization'
@@ -29422,14 +29430,80 @@ var require_Domain_v1alpha1_schema = __commonJS({
       ],
       allOf: [
         {
-          $ref: 'Entity.schema.json'
-        },
-        {
           type: 'object',
           required: ['spec'],
           properties: {
             kind: {
               enum: ['Domain']
+            },
+            metadata: {
+              type: 'object',
+              required: ['annotations'],
+              properties: {
+                needs: {
+                  type: 'object',
+                  description:
+                    "A collection of key-value pairs of other domains and what this domain needs from them. \nKeys be up to 63 alphanumeric characters including '[-_.]'. Values are a string and markdown is supported.",
+                  propertyNames: {
+                    minLength: 1,
+                    maxLength: 63,
+                    pattern: '^([a-z0-9A-Z\\-\\_\\.]+)$',
+                    $comment: "The domain key cannot exceed 63 characters and can only contain alphanumeric values including '-', '_', and '.'."
+                  },
+                  additionalProperties: {
+                    type: 'string',
+                    minLength: 1,
+                    description:
+                      "Each entry should have a Domain key which represents the other domain that is needed and a string value that describes what is needed from the other domain.  Markdown is supported.\nThe value should be worded to fill in a sentence like:  'This Domain needs the Other Domain to ___.'",
+                    examples: [
+                      {
+                        'print-vendor': 'to send printed materials',
+                        telephony: 'to notify when there are calls in the queue'
+                      }
+                    ]
+                  },
+                  examples: [
+                    {
+                      'print-vendor': 'to send printed materials',
+                      telephony: 'to notify when there are calls in the queue'
+                    }
+                  ],
+                  $comment:
+                    "Needs is a map of key-value pairs where key is the string name of the domain that is needed and the value is a string that describes what is needed from that domain.  The key cannot exceed 63 characters and can only contain alphanumeric values including '-', '_', and '.'.  The value is a string and markdown is supported."
+                },
+                annotations: {
+                  type: 'object',
+                  description: 'A collection of key-value pairs of non-identifying auxiliary information attached to the entity.',
+                  required: ['mktp.io/notes'],
+                  properties: {
+                    'mktp.io/notes': {
+                      type: 'string',
+                      description:
+                        'Long form notes about the responsibilities, scope, and other important details about the bounded context. Markdown is supported.',
+                      examples: [
+                        'Tools and components to unify and streamline front-end development.',
+                        '\nThe source of truth for allocating time to handle customer appts.'
+                      ]
+                    },
+                    'mktp.io/owners': {
+                      type: 'string',
+                      description:
+                        'Information regarding Domain ownership.  Generally used only when ownership is unsettled.  Markdown is supported.',
+                      examples: [
+                        '## Unsettled Ownership\nOwnership is NOT settled. The apps that this context should own are currently stewarded by many teams.'
+                      ]
+                    }
+                  },
+                  additionalProperties: true,
+                  patternProperties: {
+                    '^.+$': {
+                      type: 'string'
+                    }
+                  },
+                  $comment:
+                    "Annotations is a map of key-value pairs containing auxiliary information attached to the entity.  For Domains, the 'mktp.io/notes' annotation is required and any other annotations are optional."
+                }
+              }
             },
             spec: {
               type: 'object',
@@ -29657,7 +29731,11 @@ var require_Entity_schema = __commonJS({
               type: 'string',
               description: 'The name of the entity. Must be unique within the catalog for the given kind.',
               examples: ['front-end-tooling'],
-              minLength: 1
+              pattern: '^([a-z0-9A-Z\\-\\_\\.]+)$',
+              minLength: 1,
+              maxLength: 63,
+              $comment:
+                "The name must be unique within the catalog for the given kind, it cannot exceed 63 characters and it can only contain alphanumeric values including '-', '_', and '.'."
             },
             title: {
               type: 'string',
@@ -29671,7 +29749,7 @@ var require_Entity_schema = __commonJS({
             },
             annotations: {
               type: 'object',
-              description: 'Key/value pairs of non-identifying auxiliary information attached to the entity.',
+              description: 'Key-value pairs of non-identifying auxiliary information attached to the entity.',
               additionalProperties: true,
               patternProperties: {
                 '^.+$': {
@@ -29679,7 +29757,7 @@ var require_Entity_schema = __commonJS({
                 }
               },
               $comment:
-                'The object should be populated with key value pairs containing auxiliary information attached to the entity or be removed completely.'
+                'The object should be populated with key-value pairs containing auxiliary information attached to the entity or be removed completely.'
             },
             links: {
               type: 'array',
@@ -29768,7 +29846,9 @@ var require_validate2 = __commonJS({
         allErrors: true,
         async: true,
         verbose: true,
-        unicodeRegExp: false
+        unicodeRegExp: false,
+        allowMatchingProperties: true
+        // Allow overlap between 'properties' and 'patternProperties'
       });
       ajv.addSchema(catalogInfoSchema, 'root');
       ajv.addSchema(entitySchema, 'entity');
@@ -30002,6 +30082,12 @@ function setOutputsForErrors(errors, filename2, failIfThereAreErrors2) {
   if (generateJobSummary) {
     core.summary.addRaw(markdown, true).write();
   }
+  fs.writeFile('./errors-markdown.md', markdown, err => {
+    if (err) {
+      console.error(`An error occurred writing the md to file: ${err}`);
+      return;
+    }
+  });
   if (failIfThereAreErrors2) {
     core.setFailed(`${filename2} file is invalid`);
   } else {
@@ -30081,6 +30167,14 @@ validationMetadata:
         lines.push(`metadata_links: ${i}`);
       } else if (formattedLine.startsWith('deployment-environments:')) {
         lines.push(`metadata_deployment_environments: ${i}`);
+      } else if (formattedLine.startsWith('addresses:')) {
+        lines.push(`metadata_addresses: ${i}`);
+      } else if (formattedLine.startsWith('mktp.io/notes:')) {
+        lines.push(`metadata_mktp_io_notes: ${i}`);
+      } else if (formattedLine.startsWith('mktp.io/owners:')) {
+        lines.push(`metadata_mktp_io_owners: ${i}`);
+      } else if (formattedLine.startsWith('needs:')) {
+        lines.push(`metadata_needs: ${i}`);
       }
     } else if (currentParent === 'spec') {
       if (formattedLine.startsWith('type:')) {

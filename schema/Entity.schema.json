@@ -55,7 +55,10 @@
           "examples": [
             "front-end-tooling"
           ],
-          "minLength": 1
+          "pattern": "^([a-z0-9A-Z\\-\\_\\.]+)$",
+          "minLength": 1,
+          "maxLength": 63,
+          "$comment": "The name must be unique within the catalog for the given kind, it cannot exceed 63 characters and it can only contain alphanumeric values including '-', '_', and '.'."
         },
         "title": {
           "type": "string",
@@ -71,14 +74,14 @@
         },
         "annotations": {
           "type": "object",
-          "description": "Key/value pairs of non-identifying auxiliary information attached to the entity.",
+          "description": "Key-value pairs of non-identifying auxiliary information attached to the entity.",
           "additionalProperties": true,
           "patternProperties": {
             "^.+$": {
               "type": "string"
             }
           },
-          "$comment": "The object should be populated with key value pairs containing auxiliary information attached to the entity or be removed completely."
+          "$comment": "The object should be populated with key-value pairs containing auxiliary information attached to the entity or be removed completely."
         },
         "links": {
           "type": "array",

@@ -143,3 +143,20 @@ metadata:
   name: content-management-16
 extra-props: not-allowed
 ...
+---
+
+# Doc 17 - metadata.name too long
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: entity-names-can-only-be-63-characters-long-and-this-one-has--64
+...
+---
+
+# Doc 18 - metadata.name uses invalid chars
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-18!
+...
+---

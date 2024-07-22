@@ -15,7 +15,8 @@ function setupAjvSchemaValidation(Ajv) {
     allErrors: true,
     async: true,
     verbose: true,
-    unicodeRegExp: false
+    unicodeRegExp: false,
+    allowMatchingProperties: true // Allow overlap between 'properties' and 'patternProperties'
   });
 
   ajv.addSchema(catalogInfoSchema, 'root');

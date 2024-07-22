@@ -57,14 +57,14 @@ function setOutputsForErrors(errors, filename, failIfThereAreErrors) {
     core.summary.addRaw(markdown, true).write();
   }
 
-  // Uncomment if debugging locally to see what the generated markdown looks like
-  // Helpful if adjustments are made to schemas or catalog-info files used for testing
-  // fs.writeFile('./errors-markdown.md', markdown, err => {
-  //   if (err) {
-  //     console.error(`An error occurred writing the md to file: ${err}`);
-  //     return;
-  //   }
-  // });
+  // Print out an errors-markdown file which contains the markdown fragment.
+  // This will make it easier to compare expected/actual output.
+  fs.writeFile('./errors-markdown.md', markdown, err => {
+    if (err) {
+      console.error(`An error occurred writing the md to file: ${err}`);
+      return;
+    }
+  });
 
   if (failIfThereAreErrors) {
     core.setFailed(`${filename} file is invalid`);
@@ -165,6 +165,14 @@ validationMetadata:
         lines.push(`metadata_links: ${i}`);
       } else if (formattedLine.startsWith('deployment-environments:')) {
         lines.push(`metadata_deployment_environments: ${i}`);
+      } else if (formattedLine.startsWith('addresses:')) {
+        lines.push(`metadata_addresses: ${i}`);
+      } else if (formattedLine.startsWith('mktp.io/notes:')) {
+        lines.push(`metadata_mktp_io_notes: ${i}`);
+      } else if (formattedLine.startsWith('mktp.io/owners:')) {
+        lines.push(`metadata_mktp_io_owners: ${i}`);
+      } else if (formattedLine.startsWith('needs:')) {
+        lines.push(`metadata_needs: ${i}`);
       }
     } else if (currentParent === 'spec') {
       if (formattedLine.startsWith('type:')) {
