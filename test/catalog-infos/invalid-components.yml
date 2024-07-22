@@ -312,4 +312,70 @@ spec:
     - content-management-db        # Not in the right format
     - group:default/customization  # Right format but not a valid entity to depend on
 ...
+
+---
+# Doc 25 - Empty metadata.addresses
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-25
+  addresses:
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 26 - Empty metadata.addresses domain list
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-26
+  addresses:
+    mktp.io:
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+...
+
+---
+# Doc 27 - Invalid metadata.addresses domain list
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: content-mfe-27
+  addresses:
+    mktp.io:
+      # 0 - Missing subdomain
+      - subdomain:
+        path: /
+        envs: dev
+      # 1 - Missing subdomain
+      - subdomain: api
+        path:
+        envs: dev
+      # 2 - Missing envs
+      - subdomain: api
+        path: /
+        envs:
+      # 3 - Empty subdomain
+      - subdomain: ''
+        path: /
+        envs: dev
+      # 4 - Empty subdomain
+      - subdomain: api
+        path: ''
+        envs: dev
+      # 5 - Empty envs
+      - subdomain: api
+        path: /
+        envs: ''
+spec:
+  type: mfe
+  system: system:default/content-management
+  lifecycle: maintaining
+  
+...
 ---

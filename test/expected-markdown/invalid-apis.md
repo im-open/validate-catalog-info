@@ -23,3 +23,11 @@
 - Doc 15, Line 198, `API[content-mgmt-api-15]/spec` must have required property **definition**.
 - Doc 16, Line 216, `API[content-mgmt-api-16]/spec/definition` Is required and must be a string or an object with a $text, $json, or $yaml property.
   - See the [catalog info schema](https://github.com/im-open/validate-catalog-info/blob/main/schema/CatalogInfo.schema.json) for details and examples.
+- Doc 17, Line 220, `API[content-mgmt-api-17]/metadata/addresses` is an object that cannot be empty. Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property.
+- Doc 18, Line 235, `API[content-mgmt-api-18]/metadata/addresses/mktp.io` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 19, Line 251, `API[content-mgmt-api-19]/metadata/addresses/mktp.io/0/subdomain` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 19, Line 251, `API[content-mgmt-api-19]/metadata/addresses/mktp.io/1/path` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 19, Line 251, `API[content-mgmt-api-19]/metadata/addresses/mktp.io/2/envs` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 19, Line 251, `API[content-mgmt-api-19]/metadata/addresses/mktp.io/3/subdomain` cannot be empty if provided.
+- Doc 19, Line 251, `API[content-mgmt-api-19]/metadata/addresses/mktp.io/4/path` cannot be empty if provided.
+- Doc 19, Line 251, `API[content-mgmt-api-19]/metadata/addresses/mktp.io/5/envs` cannot be empty if provided.

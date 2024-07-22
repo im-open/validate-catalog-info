@@ -29112,7 +29112,7 @@ var require_API_v1alpha1_schema = __commonJS({
                     }
                   ],
                   $comment:
-                    'The object should be populated with one or more domains as the property name and a list of populated address objects as the value for each domain.'
+                    'Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property.'
                 }
               },
               $comment: 'It may contain an optional addresses property.'
@@ -29314,7 +29314,7 @@ var require_Component_v1alpha1_schema = __commonJS({
                     }
                   ],
                   $comment:
-                    'The object should be populated with one or more domains as the property name and a list of populated address objects as the value for each domain.'
+                    'Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property.'
                 }
               },
               $comment: 'It may contain an optional deployment-environments or addresses property.'

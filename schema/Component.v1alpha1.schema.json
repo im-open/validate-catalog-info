@@ -112,7 +112,7 @@
                   ]
                 }
               ],
-              "$comment": "The object should be populated with one or more domains as the property name and a list of populated address objects as the value for each domain."
+              "$comment": "Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property."
             }
           },
           "$comment": "It may contain an optional deployment-environments or addresses property."
