@@ -9,7 +9,21 @@
       "kind": "Component",
       "metadata": {
         "name": "appointment-manager-mfe",
-        "description": "Front end for setting up appointments"
+        "description": "Front end for setting up appointments",
+        "addresses": {
+          "mktp.io": [
+            {
+              "subdomain": "api",
+              "path": "/telappts",
+              "envs": "dev qa stage prod"
+            },
+            {
+              "subdomain": "telappts",
+              "path": "/tel-appointments",
+              "envs": "dev qa stage prod"
+            }
+          ]
+        }
       },
       "spec": {
         "type": "mfe",
@@ -47,9 +61,61 @@
                       "UAT"
                   ]
               }
+            },
+            "addresses": {
+              "type": "object",
+              "description": "The addresses where the Component can be accessed. Each property name of this object is the domain of the address, and the value of the property contains the remainder of the address information.",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "subdomain",
+                    "path",
+                    "envs"
+                  ],
+                  "properties": {
+                    "subdomain": {
+                      "type": "string",
+                      "description": "The subdomain of the address.",
+                      "minLength": 1
+                    },
+                    "path": {
+                      "type": "string",
+                      "description": "The path of the address.",
+                      "minLength": 1
+                    },
+                    "envs": {
+                      "type": "string",
+                      "description": "A space-separated list of environments where the Component is available.",
+                      "minLength": 1
+                    }
+                  },
+                  "examples": [
+                    {
+                      "subdomain": "api",
+                      "path": "/telappts",
+                      "envs": "dev qa stage prod"
+                    }
+                  ],
+                  "$comment": "Addresses is optional but cannot be empty.  If present, it should contain a list of address items.  Each address item has a required subdomain, path and envs property."
+                }
+              },
+              "examples": [
+                {
+                  "mktp.io": [
+                    {
+                      "subdomain": "api",
+                      "path": "/telappts",
+                      "envs": "dev qa stage prod"
+                    }
+                  ]
+                }
+              ],
+              "$comment": "Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property."
             }
           },
-          "$comment": "It may contain an optional deployment-environments property."
+          "$comment": "It may contain an optional deployment-environments or addresses property."
         },
         "spec": {
           "type": "object",

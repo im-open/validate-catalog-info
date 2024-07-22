@@ -29,7 +29,7 @@ To address the limitation with the number of annotations, an `errors-markdown` o
 ## Inputs
 
 | Parameter              | Is Required | Default              | Description                                                                                                                                                                                                                                                                                          |
-|------------------------|-------------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------- | ----------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `filename`             | false       | `./catalog-info.yml` | The name of the `catalog-info.yml` file.                                                                                                                                                                                                                                                             |
 | `fail-if-errors`       | false       | true                 | Error annotations are created for each validation error in the `catalog-info.yml` file but these errors won't cause the action to fail on their own.  If this flag is set the action will be marked as a failure if the `catalog-info.yml` file is missing, empty or contains any validation errors. |
 | `generate-job-summary` | false       | true                 | Flag that determines whether a job summary containing validation errors will be created.<ul><li>Only applicable when the file is invalid.</li><li>This is the same markdown data that is provided in the `errors-markdown` output.</li></ul>                                                         |
@@ -37,7 +37,7 @@ To address the limitation with the number of annotations, an `errors-markdown` o
 ## Outputs
 
 | Output            | Description                                                                                                                                                                                                           | Possible Values |
-|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `is-valid`        | A flag indicating whether the `catalog-info.yml` file is valid or not.                                                                                                                                                | true or false   |
 | `errors-markdown` | A markdown fragment containing the list of all validation errors in the `catalog-info.yml` file.  output is provided because GitHub limits the number of error annotations that can be created in a single run to 10. | true or false   |
 
@@ -54,7 +54,7 @@ jobs:
 
       - name: Validate catalog-info.yml
         id: catalogInfo
-        uses: im-open/validate-catalog-info@v1.0.0
+        uses: im-open/validate-catalog-info@v1.0.1
         with:
           filename: ./docs/catalog-info.yml # Defaults to ./catalog-info.yml
           fail-if-errors: false             # Defaults to true
@@ -84,7 +84,7 @@ When creating PRs, please review the following guidelines:
 This repo uses [git-version-lite] in its workflows to examine commit messages to determine whether to perform a major, minor or patch increment on merge if [source code] changes have been made.  The following table provides the fragment that should be included in a commit message to active different increment strategies.
 
 | Increment Type | Commit Message Fragment                     |
-|----------------|---------------------------------------------|
+| -------------- | ------------------------------------------- |
 | major          | +semver:breaking                            |
 | major          | +semver:major                               |
 | minor          | +semver:feature                             |

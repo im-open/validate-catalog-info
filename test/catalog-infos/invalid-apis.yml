@@ -215,3 +215,76 @@ spec:
   system: system:default/content-management
   definition: 
 ...
+
+---
+# Doc 17 - Empty metadata.addresses
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-17
+  addresses:
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 18 - Empty metadata.addresses domain list
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-18
+  addresses:
+    mktp.io:
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+...
+
+---
+# Doc 19 - Invalid metadata.addresses domain list
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: content-mgmt-api-19
+  addresses:
+    mktp.io:
+      # 0 - Missing subdomain
+      - subdomain:
+        path: /
+        envs: dev
+      # 1 - Missing subdomain
+      - subdomain: api
+        path:
+        envs: dev
+      # 2 - Missing envs
+      - subdomain: api
+        path: /
+        envs:
+      # 3 - Empty subdomain
+      - subdomain: ''
+        path: /
+        envs: dev
+      # 4 - Empty subdomain
+      - subdomain: api
+        path: ''
+        envs: dev
+      # 5 - Empty envs
+      - subdomain: api
+        path: /
+        envs: ''
+spec:
+  type: openapi
+  lifecycle: maintaining
+  system: system:default/content-management
+  definition: 
+    $text: https://content-management.io/manager/swagger/contentApi/swagger.json
+  
+...
+---
