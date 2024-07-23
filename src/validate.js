@@ -49,6 +49,12 @@ function getValidateFunctionForDocKind(kind, ajv) {
 }
 
 function getYamlLineNumberOfError(errorPath, jsonDoc) {
+  // The validation functions are reused in other places where
+  // validationMetadata is not first created so don't return a line number
+  if (!jsonDoc.validationMetadata) {
+    return null;
+  }
+
   // This sometimes happens at the root level of the doc
   if (!errorPath) {
     return jsonDoc.validationMetadata.doc;
@@ -133,7 +139,9 @@ async function validateSingleDoc(doc, docId, docCount, ajv) {
   for (const ajvError of validateWithAjvFunc.errors) {
     const instancePath = ajvError.instancePath.replace('mktp.io~1', 'mktp.io/'); // Happens when key is something like 'mktp.io/notes:'
     const lineNumber = getYamlLineNumberOfError(instancePath, doc);
-    const itemId = `Doc ${docCount}, Line ${lineNumber}, \`${docId}${instancePath}\``;
+    const itemId = lineNumber
+      ? `Doc ${docCount}, Line ${lineNumber}, \`${docId}${instancePath}\``
+      : `Doc ${docCount}, \`${docId}${instancePath}\``;
     const schemaComment = ajvError.parentSchema && ajvError.parentSchema.$comment ? ajvError.parentSchema.$comment : null;
     const hasData = isErrorDataPresent(ajvError.data);
 
@@ -250,7 +258,7 @@ async function processCatalogInfoFile(core, jsYaml, ajv, catalogInfoTextAsYaml, 
     catalogInfoDocs = jsYaml.loadAll(catalogInfoTextAsYaml);
   } catch (error) {
     const errorMessage = `An error occurred converting the file to json: ${error.message}`;
-    core.error(errorMessage, Object.assign(annotationOptions, { startLine: 0 }));
+    core.error(errorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: 0 }) : null);
     return [errorMessage];
   }
 
@@ -286,7 +294,7 @@ async function processCatalogInfoFile(core, jsYaml, ajv, catalogInfoTextAsYaml, 
           if (!allCatalogInfoErrors.includes(error.message)) {
             allCatalogInfoErrors.push(error.message);
             const plainErrorMessage = error.message.replace(/`/g, '').replace(/'/g, '').replace(/\*/g, '');
-            core.error(plainErrorMessage, Object.assign(annotationOptions, { startLine: error.line }));
+            core.error(plainErrorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: error.line }) : null);
           }
         });
       } else {
