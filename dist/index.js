@@ -29876,6 +29876,9 @@ var require_validate2 = __commonJS({
       }
     }
     function getYamlLineNumberOfError(errorPath, jsonDoc) {
+      if (!jsonDoc.validationMetadata) {
+        return null;
+      }
       if (!errorPath) {
         return jsonDoc.validationMetadata.doc;
       }
@@ -29928,7 +29931,9 @@ var require_validate2 = __commonJS({
       for (const ajvError of validateWithAjvFunc.errors) {
         const instancePath = ajvError.instancePath.replace('mktp.io~1', 'mktp.io/');
         const lineNumber = getYamlLineNumberOfError(instancePath, doc);
-        const itemId = `Doc ${docCount}, Line ${lineNumber}, \`${docId}${instancePath}\``;
+        const itemId = lineNumber
+          ? `Doc ${docCount}, Line ${lineNumber}, \`${docId}${instancePath}\``
+          : `Doc ${docCount}, \`${docId}${instancePath}\``;
         const schemaComment = ajvError.parentSchema && ajvError.parentSchema.$comment ? ajvError.parentSchema.$comment : null;
         const hasData = isErrorDataPresent(ajvError.data);
         switch (ajvError.keyword) {
@@ -30027,7 +30032,7 @@ ${ajvError.schema.$comment} e.g. '${propExamples}'`;
         catalogInfoDocs = jsYaml2.loadAll(catalogInfoTextAsYaml);
       } catch (error) {
         const errorMessage = `An error occurred converting the file to json: ${error.message}`;
-        core2.error(errorMessage, Object.assign(annotationOptions, { startLine: 0 }));
+        core2.error(errorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: 0 }) : null);
         return [errorMessage];
       }
       const numDocs = catalogInfoDocs.length;
@@ -30055,7 +30060,7 @@ Validating Doc #${docCount} - ${docId}`);
               if (!allCatalogInfoErrors.includes(error.message)) {
                 allCatalogInfoErrors.push(error.message);
                 const plainErrorMessage = error.message.replace(/`/g, '').replace(/'/g, '').replace(/\*/g, '');
-                core2.error(plainErrorMessage, Object.assign(annotationOptions, { startLine: error.line }));
+                core2.error(plainErrorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: error.line }) : null);
               }
             });
           } else {
