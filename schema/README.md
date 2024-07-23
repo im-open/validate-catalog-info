@@ -24,10 +24,9 @@ If new properties are added, removed, or modified the [catalog-info input files]
 
 The corresponding [expected-markdown] output may need to be regenerated as well.  This can be done by:
 
-1. Uncommenting the block of code that writes a markdown snippet to file
-1. Running the action locally with the filename set to the modified test file
-1. Verifying the new markdown looks correct
-1. Replacing the contents in the expected markdown file with the newly generated snippet.
+1. Running the action locally with the filename input set to the modified test file
+1. Verifying the new markdown looks correct, it should be saved in `./errors-markdown.md`
+1. Replacing the contents of the expected markdown file with the contents of `./errors-markdown.md`
 
 ## When Adding or Updating `object` Types
 
