@@ -71,13 +71,32 @@ function getYamlLineNumberOfError(errorPath, jsonDoc) {
     .substring(1, errorPath.length) // Remove the leading /
     .replace(/\//gi, '_') // Change all / to _
     .replace(/-/gi, '_') // Change - to _
+    .replace(/\./gi, '_') // Change all . to _
     .toLowerCase(); // Change everything to lower (just in case)
 
-  // If we process it and can't find the right line, default to using the line number
+  // See if we can find an exact match for the propName in the validationMetadata
+  const lineNumber = jsonDoc.validationMetadata[propName];
+  if (lineNumber) {
+    return lineNumber;
+  }
+
+  // Since there wasn't an exact line match see if we can find a match for the parent.
+  let lineNum;
+  if (propName.includes('metadata_addresses')) {
+    lineNum = jsonDoc.validationMetadata['metadata_addresses'];
+  } else if (propName.includes('metadata_needs')) {
+    lineNum = jsonDoc.validationMetadata['metadata_needs'];
+  } else if (propName.includes('metadata_annotations')) {
+    lineNum = jsonDoc.validationMetadata['metadata_annotations'];
+  }
+  if (lineNum) {
+    return lineNum;
+  }
+
+  // If we process it and can't find the line or parent, default to using the line number
   // of the doc.  This may happen if new items are added to the schema but the intial
   // loading function that preserves line numbers from the yaml file hasn't been updated.
-  const lineNumber = jsonDoc.validationMetadata[propName] || jsonDoc.validationMetadata.doc;
-  return lineNumber;
+  return jsonDoc.validationMetadata.doc;
 }
 
 function removeDuplicateishErrorFromList(errorsList, baseMsg) {
@@ -112,8 +131,9 @@ async function validateSingleDoc(doc, docId, docCount, ajv) {
   if (isValidAccordingToAjv) return [];
 
   for (const ajvError of validateWithAjvFunc.errors) {
-    const lineNumber = getYamlLineNumberOfError(ajvError.instancePath, doc);
-    const itemId = `Doc ${docCount}, Line ${lineNumber}, \`${docId}${ajvError.instancePath}\``;
+    const instancePath = ajvError.instancePath.replace('mktp.io~1', 'mktp.io/'); // Happens when key is something like 'mktp.io/notes:'
+    const lineNumber = getYamlLineNumberOfError(instancePath, doc);
+    const itemId = `Doc ${docCount}, Line ${lineNumber}, \`${docId}${instancePath}\``;
     const schemaComment = ajvError.parentSchema && ajvError.parentSchema.$comment ? ajvError.parentSchema.$comment : null;
     const hasData = isErrorDataPresent(ajvError.data);
 
@@ -191,8 +211,30 @@ async function validateSingleDoc(doc, docId, docCount, ajv) {
         const additionalMsg = `${itemId} cannot be extended with additional properties.  '${ajvError.params.additionalProperty}' should be removed.`;
         errorsList.push({ line: lineNumber, message: additionalMsg });
         break;
+      case 'propertyNames':
+        // If a maxLength was already created for this path, skip adding this
+        // propertynames message because it's less informative than that one.
+        const maxLengthMsg = `${itemId} value '${ajvError.params.propertyName}' must NOT have more than`;
+        if (errorsList.find(e => e.line == lineNumber && e.message.startsWith(maxLengthMsg))) {
+          break;
+        }
+
+        // If there is already a generic-ish invalid value error message for this path,
+        // remove it.  The message on this one is slightly better.
+        const invalidValueMsg = `${itemId} value '${ajvError.params.propertyName}' is invalid.`;
+        if (errorsList.find(e => e.line == lineNumber && e.message.startsWith(invalidValueMsg))) {
+          errorsList = removeDuplicateishErrorFromList(errorsList, invalidValueMsg);
+        }
+
+        const propExamples = ajvError.schema.examples.join(`', '`);
+        const propertyNameMsg = `${itemId.slice(0, itemId.length - 1)}/${ajvError.params.propertyName}\` is invalid.\n${ajvError.schema.$comment} e.g. '${propExamples}'`;
+        errorsList.push({ line: lineNumber, message: propertyNameMsg });
+        break;
       default:
-        errorsList.push({ line: lineNumber, message: `Unhandled keyword - ${itemId} | ${ajvError.data} | ${ajvError.message}` });
+        errorsList.push({
+          line: lineNumber,
+          message: `Unhandled keyword (${ajvError.keyword}) - ${itemId} | ${ajvError.data} | ${ajvError.message}`
+        });
         break;
     }
   }

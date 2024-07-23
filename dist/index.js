@@ -29413,7 +29413,15 @@ var require_Domain_v1alpha1_schema = __commonJS({
           kind: 'Domain',
           metadata: {
             name: 'front-end-tooling',
-            description: 'Tools and components to unify and streamline front-end development, browser performance, and consistency.'
+            description: 'Tools and components to unify and streamline front-end development, browser performance, and consistency.',
+            needs: {
+              'print-vendor': 'to send printed materials',
+              telephony: 'to notify when there are calls in the queue'
+            },
+            annotations: {
+              'mktp.io/notes': 'Tools and components to unify and streamline front-end development.',
+              'mktp.io/owners': 'Any additional info about ownership'
+            }
           },
           spec: {
             owner: 'group:default/customization'
@@ -29426,10 +29434,83 @@ var require_Domain_v1alpha1_schema = __commonJS({
         },
         {
           type: 'object',
-          required: ['spec'],
+          required: ['spec', 'metadata'],
           properties: {
             kind: {
               enum: ['Domain']
+            },
+            metadata: {
+              type: 'object',
+              required: ['annotations'],
+              properties: {
+                needs: {
+                  type: 'object',
+                  description:
+                    "A collection of key-value pairs of other domains and what this domain needs from them. \nKeys be up to 63 alphanumeric characters including '[-_.]'. Values are a string and markdown is supported.",
+                  propertyNames: {
+                    minLength: 1,
+                    maxLength: 63,
+                    pattern: '^([a-z0-9A-Z\\-\\_\\.]+)$',
+                    $comment: "Expected Pattern: '[a-z0-9A-Z-_.]'",
+                    examples: ['print-vendor', 'telephony']
+                  },
+                  additionalProperties: {
+                    type: 'string',
+                    minLength: 1,
+                    description:
+                      "Each entry should have a Domain key which represents the other domain that is needed and a string value that describes what is needed from the other domain.  Markdown is supported.\nThe value should be worded to fill in a sentence like:  'This Domain needs the Other Domain to ___.'",
+                    examples: [
+                      {
+                        'print-vendor': 'to send printed materials',
+                        telephony: 'to notify when there are calls in the queue'
+                      }
+                    ]
+                  },
+                  examples: [
+                    {
+                      'print-vendor': 'to send printed materials',
+                      telephony: 'to notify when there are calls in the queue'
+                    }
+                  ],
+                  $comment:
+                    "Needs is a map of key-value pairs where the key is the string name of the domain that is needed and the value is a string that describes what is needed from that domain.  The key cannot exceed 63 characters and can only contain alphanumeric values including '-', '_', and '.'.  The value is a string and markdown is supported."
+                },
+                annotations: {
+                  type: 'object',
+                  description: 'A collection of key-value pairs of non-identifying auxiliary information attached to the entity.',
+                  required: ['mktp.io/notes'],
+                  properties: {
+                    'mktp.io/notes': {
+                      type: 'string',
+                      description:
+                        'Long form notes about the responsibilities, scope, and other important details about the bounded context. Markdown is supported.',
+                      examples: [
+                        'Tools and components to unify and streamline front-end development.',
+                        '\nThe source of truth for allocating time to handle customer appts.'
+                      ],
+                      minLength: 1
+                    },
+                    'mktp.io/owners': {
+                      type: 'string',
+                      description:
+                        'Information regarding Domain ownership.  Generally used only when ownership is unsettled.  Markdown is supported.',
+                      examples: [
+                        '## Unsettled Ownership\nOwnership is NOT settled. The apps that this context should own are currently stewarded by many teams.'
+                      ],
+                      minLength: 1
+                    }
+                  },
+                  additionalProperties: true,
+                  patternProperties: {
+                    '^.+$': {
+                      type: 'string'
+                    }
+                  },
+                  $comment:
+                    "Annotations is a map of key-value pairs containing auxiliary information attached to the entity.  For Domains, the 'mktp.io/notes' annotation is required and any other annotations are optional."
+                }
+              },
+              $comment: 'Metadata is required and should contain the required annotations property and an optional needs property.'
             },
             spec: {
               type: 'object',
@@ -29800,9 +29881,23 @@ var require_validate2 = __commonJS({
       }
       const objArrayRegex = /\/\d{1,3}\/*.*/i;
       const errorObj = errorPath.replace(objArrayRegex, '');
-      const propName = errorObj.substring(1, errorPath.length).replace(/\//gi, '_').replace(/-/gi, '_').toLowerCase();
-      const lineNumber = jsonDoc.validationMetadata[propName] || jsonDoc.validationMetadata.doc;
-      return lineNumber;
+      const propName = errorObj.substring(1, errorPath.length).replace(/\//gi, '_').replace(/-/gi, '_').replace(/\./gi, '_').toLowerCase();
+      const lineNumber = jsonDoc.validationMetadata[propName];
+      if (lineNumber) {
+        return lineNumber;
+      }
+      let lineNum;
+      if (propName.includes('metadata_addresses')) {
+        lineNum = jsonDoc.validationMetadata['metadata_addresses'];
+      } else if (propName.includes('metadata_needs')) {
+        lineNum = jsonDoc.validationMetadata['metadata_needs'];
+      } else if (propName.includes('metadata_annotations')) {
+        lineNum = jsonDoc.validationMetadata['metadata_annotations'];
+      }
+      if (lineNum) {
+        return lineNum;
+      }
+      return jsonDoc.validationMetadata.doc;
     }
     function removeDuplicateishErrorFromList(errorsList, baseMsg) {
       const errorToRemove = errorsList.find(e => e.message.startsWith(baseMsg));
@@ -29831,8 +29926,9 @@ var require_validate2 = __commonJS({
       const isValidAccordingToAjv = await validateWithAjvFunc(doc);
       if (isValidAccordingToAjv) return [];
       for (const ajvError of validateWithAjvFunc.errors) {
-        const lineNumber = getYamlLineNumberOfError(ajvError.instancePath, doc);
-        const itemId = `Doc ${docCount}, Line ${lineNumber}, \`${docId}${ajvError.instancePath}\``;
+        const instancePath = ajvError.instancePath.replace('mktp.io~1', 'mktp.io/');
+        const lineNumber = getYamlLineNumberOfError(instancePath, doc);
+        const itemId = `Doc ${docCount}, Line ${lineNumber}, \`${docId}${instancePath}\``;
         const schemaComment = ajvError.parentSchema && ajvError.parentSchema.$comment ? ajvError.parentSchema.$comment : null;
         const hasData = isErrorDataPresent(ajvError.data);
         switch (ajvError.keyword) {
@@ -29901,8 +29997,25 @@ ${schemaComment} e.g. '${examples}'`;
             const additionalMsg = `${itemId} cannot be extended with additional properties.  '${ajvError.params.additionalProperty}' should be removed.`;
             errorsList.push({ line: lineNumber, message: additionalMsg });
             break;
+          case 'propertyNames':
+            const maxLengthMsg = `${itemId} value '${ajvError.params.propertyName}' must NOT have more than`;
+            if (errorsList.find(e => e.line == lineNumber && e.message.startsWith(maxLengthMsg))) {
+              break;
+            }
+            const invalidValueMsg = `${itemId} value '${ajvError.params.propertyName}' is invalid.`;
+            if (errorsList.find(e => e.line == lineNumber && e.message.startsWith(invalidValueMsg))) {
+              errorsList = removeDuplicateishErrorFromList(errorsList, invalidValueMsg);
+            }
+            const propExamples = ajvError.schema.examples.join(`', '`);
+            const propertyNameMsg = `${itemId.slice(0, itemId.length - 1)}/${ajvError.params.propertyName}\` is invalid.
+${ajvError.schema.$comment} e.g. '${propExamples}'`;
+            errorsList.push({ line: lineNumber, message: propertyNameMsg });
+            break;
           default:
-            errorsList.push({ line: lineNumber, message: `Unhandled keyword - ${itemId} | ${ajvError.data} | ${ajvError.message}` });
+            errorsList.push({
+              line: lineNumber,
+              message: `Unhandled keyword (${ajvError.keyword}) - ${itemId} | ${ajvError.data} | ${ajvError.message}`
+            });
             break;
         }
       }
@@ -30040,7 +30153,7 @@ async function readFileAndPreserveLineNumbers(filename2) {
   const NEW_DOC = '---';
   const METADATA = 'metadata:';
   const SPEC = 'spec:';
-  const API_VERSION = 'apiVersion:';
+  const API_VERSION = 'apiversion:';
   const KIND = 'kind:';
   let i = 0;
   let lines = ['doc: 0'];
@@ -30096,9 +30209,9 @@ validationMetadata:
       } else if (formattedLine.startsWith('addresses:')) {
         lines.push(`metadata_addresses: ${i}`);
       } else if (formattedLine.startsWith('mktp.io/notes:')) {
-        lines.push(`metadata_mktp_io_notes: ${i}`);
+        lines.push(`metadata_annotations_mktp_io_notes: ${i}`);
       } else if (formattedLine.startsWith('mktp.io/owners:')) {
-        lines.push(`metadata_mktp_io_owners: ${i}`);
+        lines.push(`metadata_annotations_mktp_io_owners: ${i}`);
       } else if (formattedLine.startsWith('needs:')) {
         lines.push(`metadata_needs: ${i}`);
       }

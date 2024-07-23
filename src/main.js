@@ -96,7 +96,7 @@ async function readFileAndPreserveLineNumbers(filename) {
   const NEW_DOC = '---';
   const METADATA = 'metadata:';
   const SPEC = 'spec:';
-  const API_VERSION = 'apiVersion:';
+  const API_VERSION = 'apiversion:';
   const KIND = 'kind:';
 
   let i = 0;
@@ -168,9 +168,9 @@ validationMetadata:
       } else if (formattedLine.startsWith('addresses:')) {
         lines.push(`metadata_addresses: ${i}`);
       } else if (formattedLine.startsWith('mktp.io/notes:')) {
-        lines.push(`metadata_mktp_io_notes: ${i}`);
+        lines.push(`metadata_annotations_mktp_io_notes: ${i}`);
       } else if (formattedLine.startsWith('mktp.io/owners:')) {
-        lines.push(`metadata_mktp_io_owners: ${i}`);
+        lines.push(`metadata_annotations_mktp_io_owners: ${i}`);
       } else if (formattedLine.startsWith('needs:')) {
         lines.push(`metadata_needs: ${i}`);
       }
