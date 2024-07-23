@@ -34,7 +34,6 @@ env:
   
 jobs:
   build-and-review-pr:
-    if: 1 == 2
     # This reusable workflow will check to see if an action's source code has changed based on
     # whether the PR includes files that match the files-with-code arg or are in one of the
     # dirs-with-code directories.  If there are source code changes, this reusable workflow
