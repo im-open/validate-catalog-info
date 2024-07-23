@@ -48,10 +48,10 @@
 - Doc 24, Line 315, `Component[content-mfe-24]/spec/dependsOn/2` value **group:default/customization** is invalid.
   - Expected Pattern: `<kind>:[<optional-namespace>/]<entity-name>` e.g. **resource:default/launchdarkly**, **component:front-end-tooling-mfe**
 - Doc 25, Line 327, `Component[content-mfe-25]/metadata/addresses` is an object that cannot be empty. Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property.
-- Doc 26, Line 335, `Component[content-mfe-26]/metadata/addresses/mktp.io` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
-- Doc 27, Line 349, `Component[content-mfe-27]/metadata/addresses/mktp.io/0/subdomain` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 27, Line 349, `Component[content-mfe-27]/metadata/addresses/mktp.io/1/path` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 27, Line 349, `Component[content-mfe-27]/metadata/addresses/mktp.io/2/envs` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 27, Line 349, `Component[content-mfe-27]/metadata/addresses/mktp.io/3/subdomain` cannot be empty if provided.
-- Doc 27, Line 349, `Component[content-mfe-27]/metadata/addresses/mktp.io/4/path` cannot be empty if provided.
-- Doc 27, Line 349, `Component[content-mfe-27]/metadata/addresses/mktp.io/5/envs` cannot be empty if provided.
+- Doc 26, Line 340, `Component[content-mfe-26]/metadata/addresses/mktp.io` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/0/subdomain` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/1/path` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/2/envs` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/3/subdomain` cannot be empty if provided.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/4/path` cannot be empty if provided.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/5/envs` cannot be empty if provided.

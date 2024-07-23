@@ -3,6 +3,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: management-domain
+  needs:
+    print-vendor: to send printed materials
+    telephony: to notify when there are calls in the queue
+  annotations:
+    mktp.io/notes: Tools and components to unify and streamline front-end development.
+    mktp.io/owners: Additional info about ownership of this domain.
 spec:
   type: Core
   owner: group:default/customization
@@ -27,6 +33,11 @@ metadata:
     - Dev
     - QA
     - Prod
+  addresses:
+    mktp.io:
+      - subdomain: api
+        path: /
+        envs: dev qa stage prod
 spec:
   type: service
   lifecycle: maintaining
@@ -46,6 +57,11 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: content-mgmt-api
+  addresses:
+    mktp.io:
+      - subdomain: api
+        path: /
+        envs: dev qa stage prod
 spec:
   type: openapi
   lifecycle: maintaining
