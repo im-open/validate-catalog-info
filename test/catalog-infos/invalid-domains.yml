@@ -6,6 +6,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain
+  needs:
+    print-vendor: to send printed materials
+    telephony: to notify when there are calls in the queue
+  annotations:
+    mktp.io/notes: Tools and components to unify and streamline front-end development.
+    mktp.io/owners: Additional info about ownership of this domain.
 spec:
   type: Core
   owner: group:default/customization
@@ -23,6 +29,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-3
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
 ...
 ---
@@ -32,6 +40,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-4
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
   type: External
 ...
@@ -41,6 +51,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-5
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
   owner:
   type: External
@@ -51,6 +63,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-6
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
   owner: content-management
   type: Generic
@@ -62,6 +76,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-7
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
   owner: group:default/content-management
 ...
@@ -72,6 +88,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-8
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
   owner: group:default/content-management
   type:
@@ -83,9 +101,184 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: cm-domain-9
+  annotations:
+    mktp.io/notes: Managing content for all the domains
 spec:
   owner: group:default/content-management
   type: invalidThing
 ...
 ---
 
+# Doc 10 - Missing metadata
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 11 - Empty metadata
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 12 - Empty metadata.annotations
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-12
+  annotations:
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 13 - Missing metadata.annotations.mktp.io/notes
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-13
+  annotations:
+    mktp.io/notes:
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 14 - Empty metadata.annotations.mktp.io/notes
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-14
+  annotations:
+    mktp.io/notes: ''
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 15 - Missing metadata.annotations.mktp.io/owners
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-15
+  annotations:
+    mktp.io/notes: >-
+      Notes for the domain.
+    mktp.io/owners:
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 16 - Empty metadata.annotations.mktp.io/owners
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-16
+  annotations:
+    mktp.io/notes:  |-
+      *Notes* for the domain.
+    mktp.io/owners: ''
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 17 - Empty metadata.needs
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-17
+  annotations:
+    mktp.io/notes:  '## Notes or the domain.'
+  needs:
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 18 - metadata.needs key too long
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-18
+  annotations:
+    mktp.io/notes:  '## Notes or the domain.'
+  needs:
+    entity-names-can-only-be-63-characters-long-and-this-one-has--64: to send small content back
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 19 - metadata.needs key with invalid characters
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-19
+  annotations:
+    mktp.io/notes:  '## Notes or the domain.'
+  needs:
+    domain-with-inv@lid-ch@rs: to send valid content back
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 20 - metadata.needs value with missing value
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-20
+  annotations:
+    mktp.io/notes:  '## Notes or the domain.'
+  needs:
+    print-vendor:
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+# Doc 21 - metadata.needs value with empty value
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-21
+  annotations:
+    mktp.io/notes:  '## Notes or the domain.'
+  needs:
+    print-vendor: ''
+spec:
+  owner: group:default/content-management
+  type: Core
+...
+---
+
+# Doc 22 - metadata.needs value with invalid type
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cm-domain-22
+  annotations:
+    mktp.io/notes:  '## Notes or the domain.'
+  needs:
+    print-vendor: 123
+spec:
+  owner: group:default/content-management
+  type: Core
+...

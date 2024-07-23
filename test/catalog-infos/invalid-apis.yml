@@ -6,7 +6,12 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: content-mgmt-api
-spec:
+  addresses:
+    mktp.io:
+      - subdomain: api
+        path: /
+        envs: dev qa stage prod
+spec: 
   type: openapi
   lifecycle: maintaining
   system: system:default/content-management

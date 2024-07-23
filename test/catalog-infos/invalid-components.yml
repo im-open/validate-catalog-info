@@ -10,6 +10,11 @@ metadata:
     - Dev
     - QA
     - Prod
+  addresses:
+    mktp.io:
+      - subdomain: api
+        path: /
+        envs: dev qa stage prod
 spec:
   type: mfe
   lifecycle: maintaining

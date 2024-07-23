@@ -2,56 +2,56 @@
 
 `./test/catalog-infos/invalid-components.yml` contains the following validation errors:
 
-- Doc 3, Line 39, `Component[content-mfe-3]/metadata/deployment-environments` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
-- Doc 4, Line 52, `Component[content-mfe-4]/metadata/deployment-environments` must NOT have duplicate items (items 2 and 0 are identical).
-- Doc 5, Line 69, `Component[content-mfe-5]/spec` is an object that cannot be empty. It should contain lifecycle, system, and type properties and may contain optional owner, subcomponentOf, providesApis, consumesApis and dependsOn props.
-- Doc 6, Line 78, `Component[content-mfe-6]/spec` must have required property **type**.
-- Doc 7, Line 91, `Component[content-mfe-7]/spec/type` value cannot be empty
+- Doc 3, Line 44, `Component[content-mfe-3]/metadata/deployment-environments` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 4, Line 57, `Component[content-mfe-4]/metadata/deployment-environments` must NOT have duplicate items (items 2 and 0 are identical).
+- Doc 5, Line 74, `Component[content-mfe-5]/spec` is an object that cannot be empty. It should contain lifecycle, system, and type properties and may contain optional owner, subcomponentOf, providesApis, consumesApis and dependsOn props.
+- Doc 6, Line 83, `Component[content-mfe-6]/spec` must have required property **type**.
+- Doc 7, Line 96, `Component[content-mfe-7]/spec/type` value cannot be empty
   - Allowed values: *service, library, documentation, tool, mfe, site*
-- Doc 8, Line 103, `Component[content-mfe-8]/spec/type` value **InvalidResourceType** is invalid
+- Doc 8, Line 108, `Component[content-mfe-8]/spec/type` value **InvalidResourceType** is invalid
   - Allowed values: *service, library, documentation, tool, mfe, site*
-- Doc 9, Line 114, `Component[content-mfe-9]/spec` must have required property **system**.
-- Doc 10, Line 128, `Component[content-mfe-10]/spec/system` value cannot be empty.
+- Doc 9, Line 119, `Component[content-mfe-9]/spec` must have required property **system**.
+- Doc 10, Line 133, `Component[content-mfe-10]/spec/system` value cannot be empty.
   - Expected Pattern: `system:[<optional-namespace>/]<system-name>` e.g. **system:default/appointment-manager**, **system:appointment-manager**
-- Doc 11, Line 140, `Component[content-mfe-11]/spec/system` value **content-management** is invalid.
+- Doc 11, Line 145, `Component[content-mfe-11]/spec/system` value **content-management** is invalid.
   - Expected Pattern: `system:[<optional-namespace>/]<system-name>` e.g. **system:default/appointment-manager**, **system:appointment-manager**
-- Doc 12, Line 150, `Component[content-mfe-12]/spec` must have required property **lifecycle**.
-- Doc 13, Line 165, `Component[content-mfe-13]/spec/lifecycle` value cannot be empty
+- Doc 12, Line 155, `Component[content-mfe-12]/spec` must have required property **lifecycle**.
+- Doc 13, Line 170, `Component[content-mfe-13]/spec/lifecycle` value cannot be empty
   - Allowed values: *experimenting, developing, maintaining, deprecating, obsolete*
-- Doc 14, Line 177, `Component[content-mfe-14]/spec/lifecycle` value **prod** is invalid
+- Doc 14, Line 182, `Component[content-mfe-14]/spec/lifecycle` value **prod** is invalid
   - Allowed values: *experimenting, developing, maintaining, deprecating, obsolete*
-- Doc 15, Line 190, `Component[content-mfe-15]/spec/owner` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 16, Line 203, `Component[content-mfe-16]/spec/owner` value **customization** is invalid.
+- Doc 15, Line 195, `Component[content-mfe-15]/spec/owner` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 16, Line 208, `Component[content-mfe-16]/spec/owner` value **customization** is invalid.
   - Expected Pattern: `<kind>:[<optional-namespace>/]<entity-name>` e.g. **group:default/customization**, **group:customization**, **user:RyanHauert**, **user:default/RyanHauert**
-- Doc 17, Line 216, `Component[content-mfe-17]/spec/subcomponentOf` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 18, Line 229, `Component[content-mfe-18]/spec/subcomponentOf` value **content-management-db** is invalid.
+- Doc 17, Line 221, `Component[content-mfe-17]/spec/subcomponentOf` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 18, Line 234, `Component[content-mfe-18]/spec/subcomponentOf` value **content-management-db** is invalid.
   - Expected Pattern: `component:[<optional-namespace>/]<component-name>` e.g. **component:default/discover-mfe**, **component:discover-mfe**
-- Doc 19, Line 241, `Component[content-mfe-19]/spec/providesApis` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
-- Doc 20, Line 254, `Component[content-mfe-20]/spec/providesApis/0` value cannot be empty.
+- Doc 19, Line 246, `Component[content-mfe-19]/spec/providesApis` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 20, Line 259, `Component[content-mfe-20]/spec/providesApis/0` value cannot be empty.
   - Expected Pattern: `api:[<optional-namespace>/]<api-name>` e.g. **api:default/appointment-manager-service**, **api:appointment-manager-service**
-- Doc 20, Line 254, `Component[content-mfe-20]/spec/providesApis/1` value **content-management-db** is invalid.
+- Doc 20, Line 259, `Component[content-mfe-20]/spec/providesApis/1` value **content-management-db** is invalid.
   - Expected Pattern: `api:[<optional-namespace>/]<api-name>` e.g. **api:default/appointment-manager-service**, **api:appointment-manager-service**
-- Doc 20, Line 254, `Component[content-mfe-20]/spec/providesApis/2` value **resource:default/content-management-db** is invalid.
+- Doc 20, Line 259, `Component[content-mfe-20]/spec/providesApis/2` value **resource:default/content-management-db** is invalid.
   - Expected Pattern: `api:[<optional-namespace>/]<api-name>` e.g. **api:default/appointment-manager-service**, **api:appointment-manager-service**
-- Doc 21, Line 269, `Component[content-mfe-21]/spec/consumesApis` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
-- Doc 22, Line 282, `Component[content-mfe-22]/spec/consumesApis/0` value cannot be empty.
+- Doc 21, Line 274, `Component[content-mfe-21]/spec/consumesApis` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 22, Line 287, `Component[content-mfe-22]/spec/consumesApis/0` value cannot be empty.
   - Expected Pattern: `api:[<optional-namespace>/]<api-name>` e.g. **api:default/appointment-manager-service**, **api:appointment-manager-service**
-- Doc 22, Line 282, `Component[content-mfe-22]/spec/consumesApis/1` value **content-management-db** is invalid.
+- Doc 22, Line 287, `Component[content-mfe-22]/spec/consumesApis/1` value **content-management-db** is invalid.
   - Expected Pattern: `api:[<optional-namespace>/]<api-name>` e.g. **api:default/appointment-manager-service**, **api:appointment-manager-service**
-- Doc 22, Line 282, `Component[content-mfe-22]/spec/consumesApis/2` value **resource:default/content-management-db** is invalid.
+- Doc 22, Line 287, `Component[content-mfe-22]/spec/consumesApis/2` value **resource:default/content-management-db** is invalid.
   - Expected Pattern: `api:[<optional-namespace>/]<api-name>` e.g. **api:default/appointment-manager-service**, **api:appointment-manager-service**
-- Doc 23, Line 297, `Component[content-mfe-23]/spec/dependsOn` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
-- Doc 24, Line 310, `Component[content-mfe-24]/spec/dependsOn/0` value cannot be empty.
+- Doc 23, Line 302, `Component[content-mfe-23]/spec/dependsOn` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 24, Line 315, `Component[content-mfe-24]/spec/dependsOn/0` value cannot be empty.
   - Expected Pattern: `<kind>:[<optional-namespace>/]<entity-name>` e.g. **resource:default/launchdarkly**, **component:front-end-tooling-mfe**
-- Doc 24, Line 310, `Component[content-mfe-24]/spec/dependsOn/1` value **content-management-db** is invalid.
+- Doc 24, Line 315, `Component[content-mfe-24]/spec/dependsOn/1` value **content-management-db** is invalid.
   - Expected Pattern: `<kind>:[<optional-namespace>/]<entity-name>` e.g. **resource:default/launchdarkly**, **component:front-end-tooling-mfe**
-- Doc 24, Line 310, `Component[content-mfe-24]/spec/dependsOn/2` value **group:default/customization** is invalid.
+- Doc 24, Line 315, `Component[content-mfe-24]/spec/dependsOn/2` value **group:default/customization** is invalid.
   - Expected Pattern: `<kind>:[<optional-namespace>/]<entity-name>` e.g. **resource:default/launchdarkly**, **component:front-end-tooling-mfe**
-- Doc 25, Line 317, `Component[content-mfe-25]/metadata/addresses` is an object that cannot be empty. Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property.
-- Doc 26, Line 330, `Component[content-mfe-26]/metadata/addresses/mktp.io` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
-- Doc 27, Line 344, `Component[content-mfe-27]/metadata/addresses/mktp.io/0/subdomain` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 27, Line 344, `Component[content-mfe-27]/metadata/addresses/mktp.io/1/path` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 27, Line 344, `Component[content-mfe-27]/metadata/addresses/mktp.io/2/envs` is a string that cannot be empty. It should be populated or be removed completely if not required.
-- Doc 27, Line 344, `Component[content-mfe-27]/metadata/addresses/mktp.io/3/subdomain` cannot be empty if provided.
-- Doc 27, Line 344, `Component[content-mfe-27]/metadata/addresses/mktp.io/4/path` cannot be empty if provided.
-- Doc 27, Line 344, `Component[content-mfe-27]/metadata/addresses/mktp.io/5/envs` cannot be empty if provided.
+- Doc 25, Line 327, `Component[content-mfe-25]/metadata/addresses` is an object that cannot be empty. Addresses should be have one or more domains as the property name and a corresponding list of address objects as the value for each domain property.
+- Doc 26, Line 340, `Component[content-mfe-26]/metadata/addresses/mktp.io` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/0/subdomain` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/1/path` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/2/envs` is a string that cannot be empty. It should be populated or be removed completely if not required.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/3/subdomain` cannot be empty if provided.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/4/path` cannot be empty if provided.
+- Doc 27, Line 354, `Component[content-mfe-27]/metadata/addresses/mktp.io/5/envs` cannot be empty if provided.

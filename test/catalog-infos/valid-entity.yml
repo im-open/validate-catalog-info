@@ -5,6 +5,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: management-domain
+  needs:
+    print-vendor: to send printed materials
+    telephony: to notify when there are calls in the queue
+  annotations:
+    mktp.io/notes: Tools and components to unify and streamline front-end development.
+    mktp.io/owners: Additional info about ownership of this domain.
 spec:
   type: Core
   owner: group:default/customization

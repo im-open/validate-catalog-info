@@ -16,7 +16,7 @@
 - Doc 10, Line 78, `System[Doc10]/metadata` is an object that cannot be empty. The metadata object requires a name property.
 - Doc 11, Line 85, `System[Doc11]/metadata/name` is a string that cannot be empty. It should be populated or be removed completely if not required.
 - Doc 12, Line 94, `System[content-management-12]/metadata/title` cannot be empty if provided.
-- Doc 13, Line 103, `System[content-management-13]/metadata/annotations` is an object that cannot be empty. The object should be populated with key value pairs containing auxiliary information attached to the entity or be removed completely.
+- Doc 13, Line 103, `System[content-management-13]/metadata/annotations` is an object that cannot be empty. The object should be populated with key-value pairs containing auxiliary information attached to the entity or be removed completely.
 - Doc 14, Line 113, `System[content-management-14]/metadata/links` is an array that cannot be empty. It should contain at least one list item or be removed completely if not required.
 - Doc 15, Line 122, `System[content-management-15]/metadata/links/0` must have required property **url**.
 - Doc 15, Line 122, `System[content-management-15]/metadata/links/1/url` cannot be empty if provided.
@@ -26,3 +26,6 @@
 - Doc 15, Line 122, `System[content-management-15]/metadata/links/4/icon` value **description** is invalid
   - Allowed values: *catalog, scaffolder, techdocs, search, chat, dashboard, docs, email, github, group, help, kind:api, kind:component, kind:domain, kind:group, kind:location, kind:system, kind:user, kind:resource, user, warning*
 - Doc 16, Line 138, `System[content-management-16]` cannot be extended with additional properties.  **extra-props** should be removed.
+- Doc 17, Line 152, `System[entity-names-can-only-be-63-characters-long-and-this-one-has--64]/metadata/name` value **entity-names-can-only-be-63-characters-long-and-this-one-has--64** must NOT have more than 63 characters.
+- Doc 18, Line 160, `System[content-management-18!]/metadata/name` value **content-management-18!** is invalid.
+The name must be unique within the catalog for the given kind, it cannot exceed 63 characters and it can only contain alphanumeric values including **-**, **_**, and **.**. e.g. **front-end-tooling**
