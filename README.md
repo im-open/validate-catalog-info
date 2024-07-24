@@ -54,7 +54,7 @@ jobs:
 
       - name: Validate catalog-info.yml
         id: catalogInfo
-        uses: im-open/validate-catalog-info@v1.0.3
+        uses: im-open/validate-catalog-info@v1.0.4
         with:
           filename: ./docs/catalog-info.yml # Defaults to ./catalog-info.yml
           fail-if-errors: false             # Defaults to true

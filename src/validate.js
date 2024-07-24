@@ -258,7 +258,12 @@ async function processCatalogInfoFile(core, jsYaml, ajv, catalogInfoTextAsYaml, 
     catalogInfoDocs = jsYaml.loadAll(catalogInfoTextAsYaml);
   } catch (error) {
     const errorMessage = `An error occurred converting the file to json: ${error.message}`;
-    core.error(errorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: 0 }) : null);
+    if (annotationOptions) {
+      core.error(errorMessage, Object.assign(annotationOptions, { startLine: 0 }));
+    } else {
+      core.error(errorMessage);
+    }
+
     return [errorMessage];
   }
 
@@ -294,7 +299,12 @@ async function processCatalogInfoFile(core, jsYaml, ajv, catalogInfoTextAsYaml, 
           if (!allCatalogInfoErrors.includes(error.message)) {
             allCatalogInfoErrors.push(error.message);
             const plainErrorMessage = error.message.replace(/`/g, '').replace(/'/g, '').replace(/\*/g, '');
-            core.error(plainErrorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: error.line }) : null);
+
+            if (annotationOptions) {
+              core.error(plainErrorMessage, Object.assign(annotationOptions, { startLine: error.line }));
+            } else {
+              core.error(plainErrorMessage);
+            }
           }
         });
       } else {

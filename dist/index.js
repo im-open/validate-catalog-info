@@ -30032,7 +30032,11 @@ ${ajvError.schema.$comment} e.g. '${propExamples}'`;
         catalogInfoDocs = jsYaml2.loadAll(catalogInfoTextAsYaml);
       } catch (error) {
         const errorMessage = `An error occurred converting the file to json: ${error.message}`;
-        core2.error(errorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: 0 }) : null);
+        if (annotationOptions) {
+          core2.error(errorMessage, Object.assign(annotationOptions, { startLine: 0 }));
+        } else {
+          core2.error(errorMessage);
+        }
         return [errorMessage];
       }
       const numDocs = catalogInfoDocs.length;
@@ -30060,7 +30064,11 @@ Validating Doc #${docCount} - ${docId}`);
               if (!allCatalogInfoErrors.includes(error.message)) {
                 allCatalogInfoErrors.push(error.message);
                 const plainErrorMessage = error.message.replace(/`/g, '').replace(/'/g, '').replace(/\*/g, '');
-                core2.error(plainErrorMessage, annotationOptions ? Object.assign(annotationOptions, { startLine: error.line }) : null);
+                if (annotationOptions) {
+                  core2.error(plainErrorMessage, Object.assign(annotationOptions, { startLine: error.line }));
+                } else {
+                  core2.error(plainErrorMessage);
+                }
               }
             });
           } else {
