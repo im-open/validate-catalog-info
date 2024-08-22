@@ -29548,7 +29548,7 @@ var require_Resource_v1alpha1_schema = __commonJS({
       $id: 'Resource.v1alpha1.schema.json',
       $comment: 'Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.',
       description:
-        "Resources are those things that aren't components themselves, but are either needed by components or augment components to help them function. Some examples include the ExtendHealth Database, the App Gateway, Resource Groups, and fileshares.\r\rIf a Resource has multiple instances, such as is the case for the internal App Gateway, they should be recorded in the metadata.instances property.\r\rMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/resource/ .",
+        "Resources are those things that aren't components themselves, but are either needed by components or augment components to help them function. Some examples include the ExtendHealth Database, the App Gateway, Resource Groups, and fileshares.\r\rMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/resource/ .",
       examples: [
         {
           apiVersion: 'backstage.io/v1alpha1',
