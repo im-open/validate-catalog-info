@@ -1,13 +1,13 @@
 # validate-catalog-info
 
-This action validates the contents of a `catalog-info.yml` file.  This action can be used during CI or other workflows to ensure the ongoing validity of the file.  
+This action validates the contents of a `catalog-info.yml` file.  This action can be used during CI or other workflows to ensure the ongoing validity of the file.
 
 The action uses the files defined in the [schema] directory for validation.
 
 > [!NOTE]
 > The action does require the `catalog-info.yml` file to exist on disk prior to running this validation action.
 
-The action creates [error annotations] for every validation error it finds and a [warning annotation] for each invalid yaml document inside the `catalog-info.yml`.  GitHub has [annotation limits]  of 10 error and 10 warning annotations per step though, so only 10 errors and 10 warnings will can be shown on the `catalog-info.yml` file or on the workflow summary.  The workflow log still shows all errors.  
+The action creates [error annotations] for every validation error it finds and a [warning annotation] for each invalid yaml document inside the `catalog-info.yml`.  GitHub has [annotation limits]  of 10 error and 10 warning annotations per step though, so only 10 errors and 10 warnings will can be shown on the `catalog-info.yml` file or on the workflow summary.  The workflow log still shows all errors.
 
 To address the limitation with the number of annotations, an `errors-markdown` output is available with the generated markdown for all errors detected in the file.  A job summary is created automatically with the same markdown unless `generate-job-summary` is set to `false`.
 
@@ -54,7 +54,7 @@ jobs:
 
       - name: Validate catalog-info.yml
         id: catalogInfo
-        uses: im-open/validate-catalog-info@v1.0.4
+        uses: im-open/validate-catalog-info@v1.0.5
         with:
           filename: ./docs/catalog-info.yml # Defaults to ./catalog-info.yml
           fail-if-errors: false             # Defaults to true
@@ -93,7 +93,7 @@ This repo uses [git-version-lite] in its workflows to examine commit messages to
 
 ### Source Code Changes
 
-The files and directories that are considered source code are listed in the `files-with-code` and `dirs-with-code` arguments in both the [build-and-review-pr] and [increment-version-on-merge] workflows.  
+The files and directories that are considered source code are listed in the `files-with-code` and `dirs-with-code` arguments in both the [build-and-review-pr] and [increment-version-on-merge] workflows.
 
 If a PR contains source code changes, the README.md should be updated with the latest action version and the action should be recompiled.  The [build-and-review-pr] workflow will ensure these steps are performed when they are required.  The workflow will provide instructions for completing these steps if the PR Author does not initially complete them.
 
