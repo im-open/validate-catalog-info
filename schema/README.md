@@ -22,6 +22,8 @@ See ajv's [JSON Schema] for details on what properties & functionality are compa
 
 If new properties are added, removed, or modified the [catalog-info input files] should be updated to reflect those changes.
 
+**System** entities (`System.v1alpha1.schema.json`) restrict `spec.type` to `bounded-context` and `product` (and YAML `null`). When `spec.type` is omitted or `null`, it is treated semantically as **bounded-context**; the schema documents this with `default` but validation does not rewrite the parsed document.
+
 The corresponding [expected-markdown] output may need to be regenerated as well.  This can be done by:
 
 1. Running the action locally with the filename input set to the modified test file
