@@ -36,5 +36,5 @@ outputs:
       can be created in a single run to 10.
   
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
