@@ -29644,8 +29644,7 @@ var require_System_v1alpha1_schema = __commonJS({
       $schema: 'http://json-schema.org/draft-07/schema',
       $id: 'System.v1alpha1.schema.json',
       $comment: 'Based, with some modification & customization, on https://json.schemastore.org/catalog-info.json.',
-      description:
-        'Like Domain entities, System entities are a little different than other entity types. Most of them represent bounded contexts, and will therefore "contain" Component, API, and Resource entities via those entities spec.system property. There are a few Systems that will be outside of our bounded context model however. These Systems will include things like TechHub, pipeline tooling, and anything else of a nonfunctional nature (authentication, observability, infrastructure systems, etc.).\r\rOnce a Component, Resource, or API is created to implement a Domain, a System entity should be created and linked to that Domain with the spec.domain property (see below).\r\rMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/system/ .',
+      description: `System entities classify software along two lines via spec.type: bounded-context (the default when type is omitted or null) groups Component, API, and Resource entities that implement a domain; product represents a product-level grouping. Most systems are bounded contexts and "contain" other entities via those entities' spec.system property. Product systems may span or organize bounded contexts differently.\r\rOnce a Component, Resource, or API is created to implement a Domain, a System entity should be created and linked to that Domain with the spec.domain property (see below).\r\rMore info @ https://techhub.mktp.io/docs/default/system/techhub/catalog-info-entities/system/ .`,
       examples: [
         {
           apiVersion: 'backstage.io/v1alpha1',
@@ -29653,6 +29652,21 @@ var require_System_v1alpha1_schema = __commonJS({
           metadata: {
             name: 'appointment-manager',
             title: 'Appointment Manager'
+          },
+          spec: {
+            domain: 'domain:default/scheduling'
+          }
+        },
+        {
+          apiVersion: 'backstage.io/v1alpha1',
+          kind: 'System',
+          metadata: {
+            name: 'example-product',
+            title: 'Example Product'
+          },
+          spec: {
+            type: 'product',
+            owner: 'group:default/customization'
           }
         }
       ],
@@ -29669,6 +29683,12 @@ var require_System_v1alpha1_schema = __commonJS({
             spec: {
               type: 'object',
               properties: {
+                type: {
+                  description:
+                    'Classifies the system. When omitted or set to null, the effective type is bounded-context. Only bounded-context and product are allowed as string values.',
+                  enum: ['bounded-context', 'product', null],
+                  default: 'bounded-context'
+                },
                 owner: {
                   type: 'string',
                   description:
@@ -29685,7 +29705,7 @@ var require_System_v1alpha1_schema = __commonJS({
                   examples: ['domain:default/front-end-tooling', 'domain:content-management']
                 }
               },
-              $comment: 'It should contain at least one optional domain or owner property or be removed completely.'
+              $comment: 'It may contain optional type, domain, and owner properties or be removed completely.'
             }
           }
         }

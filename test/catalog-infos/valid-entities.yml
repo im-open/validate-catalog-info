@@ -88,3 +88,23 @@ spec:
     - component:default/content-mgmt-mfe
 ...
 ---
+# Doc 6 - Valid System with spec.type product
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: example-product-line
+spec:
+  type: product
+  owner: group:default/customization
+...
+---
+# Doc 7 - Valid System with spec.type null (semantic bounded-context)
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: explicit-null-type-system
+spec:
+  type: null
+  owner: group:default/customization
+...
+---

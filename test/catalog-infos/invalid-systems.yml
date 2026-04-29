@@ -59,4 +59,14 @@ metadata:
 spec:
   domain: content-management-domain
 ...
+---
+# Doc 8 - Invalid spec.type
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: content-management-8
+spec:
+  type: service
+  owner: group:default/customization
+...
 

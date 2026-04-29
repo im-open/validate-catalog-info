@@ -54,7 +54,7 @@ jobs:
 
       - name: Validate catalog-info.yml
         id: catalogInfo
-        uses: im-open/validate-catalog-info@v2.0.0
+        uses: im-open/validate-catalog-info@v2.0.1
         with:
           filename: ./docs/catalog-info.yml # Defaults to ./catalog-info.yml
           fail-if-errors: false             # Defaults to true
@@ -114,7 +114,9 @@ If changes are made to the action's [source code], the [usage examples] section 
 
 ### Tests
 
-The build and review PR workflow includes tests which are linked to a status check. That status check needs to succeed before a PR is merged to the default branch.  When a PR comes from a branch, there should not be any issues running the tests. When a PR comes from a fork, tests may not have the required permissions or access to run since the `GITHUB_TOKEN` only has `read` access set for all scopes. Also, forks cannot access other secrets in the repository.  In these scenarios, a fork may need to be merged into an intermediate branch by the repository owners to ensure the tests run successfully prior to merging to the default branch.
+Run unit tests locally with `npm ci` and `npm test` (Node.js built-in test runner over `test/unit/**/*.test.js`).
+
+The build and review PR workflow includes those unit tests plus integration checks that run this action against fixture `catalog-info` files and compare outputs to expected markdown. That status check needs to succeed before a PR is merged to the default branch.  When a PR comes from a branch, there should not be any issues running the tests. When a PR comes from a fork, tests may not have the required permissions or access to run since the `GITHUB_TOKEN` only has `read` access set for all scopes. Also, forks cannot access other secrets in the repository.  In these scenarios, a fork may need to be merged into an intermediate branch by the repository owners to ensure the tests run successfully prior to merging to the default branch.
 
 ## Code of Conduct
 
