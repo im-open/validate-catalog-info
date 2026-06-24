@@ -1,10 +1,10 @@
-const catalogInfoSchema = require('../schema/CatalogInfo.schema.json');
-const apiSchema = require('../schema/API.v1alpha1.schema.json');
-const componentSchema = require('../schema/Component.v1alpha1.schema.json');
-const domainSchema = require('../schema/Domain.v1alpha1.schema.json');
-const resourceSchema = require('../schema/Resource.v1alpha1.schema.json');
-const systemSchema = require('../schema/System.v1alpha1.schema.json');
-const entitySchema = require('../schema/Entity.schema.json');
+import catalogInfoSchema from '../schema/CatalogInfo.schema.json' with { type: 'json' };
+import apiSchema from '../schema/API.v1alpha1.schema.json' with { type: 'json' };
+import componentSchema from '../schema/Component.v1alpha1.schema.json' with { type: 'json' };
+import domainSchema from '../schema/Domain.v1alpha1.schema.json' with { type: 'json' };
+import resourceSchema from '../schema/Resource.v1alpha1.schema.json' with { type: 'json' };
+import systemSchema from '../schema/System.v1alpha1.schema.json' with { type: 'json' };
+import entitySchema from '../schema/Entity.schema.json' with { type: 'json' };
 
 const SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/CatalogInfo.schema.json';
 const API_SCHEMA_URL = 'https://github.com/im-open/validate-catalog-info/blob/main/schema/API.v1alpha1.schema.json';
@@ -249,13 +249,13 @@ async function validateSingleDoc(doc, docId, docCount, ajv) {
   return errorsList;
 }
 
-async function processCatalogInfoFile(core, jsYaml, ajv, catalogInfoTextAsYaml, filename, annotationOptions) {
+async function processCatalogInfoFile(core, loadAll, ajv, catalogInfoTextAsYaml, filename, annotationOptions) {
   // This will take the entire contents of catalog-info.yml (which can contain
   // multiple yaml docs) and convert them into an array of json docs (which
   // represent catalog-info entities) and will process them individually with ajv
   let catalogInfoDocs;
   try {
-    catalogInfoDocs = jsYaml.loadAll(catalogInfoTextAsYaml);
+    catalogInfoDocs = loadAll(catalogInfoTextAsYaml);
   } catch (error) {
     const errorMessage = `An error occurred converting the file to json: ${error.message}`;
     if (annotationOptions) {
@@ -322,7 +322,4 @@ async function processCatalogInfoFile(core, jsYaml, ajv, catalogInfoTextAsYaml, 
   return allCatalogInfoErrors;
 }
 
-module.exports = {
-  setupAjvSchemaValidation,
-  processCatalogInfoFile
-};
+export { setupAjvSchemaValidation, processCatalogInfoFile };

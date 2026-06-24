@@ -1,7 +1,7 @@
-const { before, describe, test } = require('node:test');
-const assert = require('node:assert/strict');
-const Ajv = require('ajv');
-const { setupAjvSchemaValidation } = require('../../src/validate.js');
+import { before, describe, test } from 'node:test';
+import { ok as _ok, equal } from 'node:assert/strict';
+import Ajv from 'ajv';
+import { setupAjvSchemaValidation } from '../../src/validate.js';
 
 describe('System spec.type', () => {
   let validate;
@@ -9,7 +9,7 @@ describe('System spec.type', () => {
   before(() => {
     const ajv = setupAjvSchemaValidation(Ajv);
     validate = ajv.getSchema('system');
-    assert.ok(validate, 'compiled system schema should exist');
+    _ok(validate, 'compiled system schema should exist');
   });
 
   function systemDoc(spec) {
@@ -23,26 +23,26 @@ describe('System spec.type', () => {
 
   test('omitted spec.type is valid', async () => {
     const ok = await validate(systemDoc({ owner: 'group:default/customization' }));
-    assert.equal(ok, true);
+    equal(ok, true);
   });
 
   test('spec.type bounded-context is valid', async () => {
     const ok = await validate(systemDoc({ type: 'bounded-context', owner: 'group:default/customization' }));
-    assert.equal(ok, true);
+    equal(ok, true);
   });
 
   test('spec.type product is valid', async () => {
     const ok = await validate(systemDoc({ type: 'product', owner: 'group:default/customization' }));
-    assert.equal(ok, true);
+    equal(ok, true);
   });
 
   test('spec.type null is valid', async () => {
     const ok = await validate(systemDoc({ type: null, owner: 'group:default/customization' }));
-    assert.equal(ok, true);
+    equal(ok, true);
   });
 
   test('disallowed spec.type string is invalid', async () => {
     const ok = await validate(systemDoc({ type: 'service', owner: 'group:default/customization' }));
-    assert.equal(ok, false);
+    equal(ok, false);
   });
 });
