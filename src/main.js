@@ -1,9 +1,9 @@
-const core = require('@actions/core');
-const fs = require('fs');
-const readline = require('readline');
-const jsYaml = require('js-yaml');
-const Ajv = require('ajv');
-const { processCatalogInfoFile, setupAjvSchemaValidation } = require('./validate.js');
+import * as core from '@actions/core';
+import fs from 'fs';
+import readline from 'readline';
+import { loadAll } from 'js-yaml';
+import Ajv from 'ajv';
+import { processCatalogInfoFile, setupAjvSchemaValidation } from './validate.js';
 
 const requiredArgOptions = {
   required: true,
@@ -261,7 +261,7 @@ async function run() {
   // Validate the contents of catalog-info.yml
   const ajv = setupAjvSchemaValidation(Ajv);
 
-  const repoErrors = await processCatalogInfoFile(core, jsYaml, ajv, catalogInfoText, filename, annotationOptions);
+  const repoErrors = await processCatalogInfoFile(core, loadAll, ajv, catalogInfoText, filename, annotationOptions);
   if (repoErrors.length === 0) {
     core.info(`${filename} file is valid`);
     core.setOutput(OUTPUT_IS_VALID, true);
